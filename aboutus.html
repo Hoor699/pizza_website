@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — Fuoco Pizza | Our Story & History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Poppins:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#e63946;--primary-dark:#c1121f;--orange:#f77f00;--orange-light:#fcbf49;
+            --dark:#0a0a0a;--dark-2:#111111;--dark-3:#1a1a1a;--dark-4:#222222;--dark-5:#2a2a2a;
+            --white:#ffffff;--gray:#b0b0b0;--gray-light:#d4d4d4;
+            --glass-bg:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.08);
+            --gradient-1:linear-gradient(135deg,#e63946,#f77f00);
+            --gradient-2:linear-gradient(135deg,#f77f00,#fcbf49);
+            --gradient-3:linear-gradient(135deg,#e63946,#c1121f);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Poppins',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden}
+        h1,h2,h3,h4,h5{font-family:'Playfair Display',serif}
+        .script-font{font-family:'Dancing Script',cursive}
+        ::-webkit-scrollbar{width:8px}
+        ::-webkit-scrollbar-track{background:var(--dark)}
+        ::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+
+        #preloader{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dark);z-index:99999;display:flex;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+        #preloader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .loader-pizza{width:60px;height:60px;border:4px solid rgba(230,57,70,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        /* ===== NAVBAR ===== */
+        .navbar-custom{background:rgba(10,10,10,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:10px 0;z-index:1050;border-bottom:1px solid var(--glass-border);position:fixed;top:0;left:0;right:0;transition:all .4s}
+        .navbar-custom.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.5)}
+        .navbar-inner{display:flex;align-items:center;justify-content:space-between;width:100%}
+        .navbar-brand-custom{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;color:var(--white)!important;text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0}
+        .navbar-brand-custom i{color:var(--primary);font-size:1.4rem}
+        .navbar-brand-custom span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .navbar-nav-center{display:none;align-items:center;gap:4px;position:absolute;left:50%;transform:translateX(-50%)}
+        @media(min-width:992px){.navbar-nav-center{display:flex}}
+        .nav-link-custom{color:var(--gray-light)!important;font-weight:500;font-size:.88rem;text-transform:uppercase;letter-spacing:1px;padding:8px 14px!important;position:relative;transition:color .3s;text-decoration:none;white-space:nowrap}
+        .nav-link-custom::after{content:'';position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--gradient-1);transition:all .3s;transform:translateX(-50%)}
+        .nav-link-custom:hover{color:var(--white)!important}
+        .nav-link-custom:hover::after{width:60%}
+        .nav-link-custom.active{color:var(--white)!important}
+        .nav-link-custom.active::after{width:60%}
+        .navbar-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+        .btn-order-nav{background:var(--gradient-1);color:var(--white)!important;border:none;padding:10px 26px;border-radius:50px;font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:1px;position:relative;overflow:hidden;transition:all .3s;box-shadow:0 0 20px rgba(230,57,70,.3);text-decoration:none}
+        .btn-order-nav:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(230,57,70,.5);color:var(--white)!important}
+        .btn-order-nav::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shimmer 2s infinite}
+        @keyframes shimmer{to{left:100%}}
+        .cart-badge{position:absolute;top:-5px;right:-5px;background:var(--primary);width:18px;height:18px;border-radius:50%;font-size:.6rem;display:flex;align-items:center;justify-content:center;font-weight:700}
+        .glow-btn{position:relative}
+        .glow-btn::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(230,57,70,.4);border-radius:50%;transform:translate(-50%,-50%);transition:width .6s,height .6s;z-index:-1}
+        .glow-btn:hover::after{width:200%;height:200%}
+        .cart-btn-nav{background:none;border:none;color:var(--white);font-size:1.15rem;cursor:pointer;padding:0;position:relative;transition:color .3s}
+        .cart-btn-nav:hover{color:var(--orange)}
+
+        .burger-btn{width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:12px;cursor:pointer;padding:10px;transition:all .3s}
+        .burger-btn:hover{border-color:rgba(230,57,70,.3)}
+        .burger-line{width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s;transform-origin:center}
+        .burger-btn.active .burger-line:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+        .burger-btn.active .burger-line:nth-child(2){opacity:0;transform:scaleX(0)}
+        .burger-btn.active .burger-line:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
+
+        .mobile-menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1040;opacity:0;visibility:hidden;transition:all .4s;backdrop-filter:blur(4px)}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible}
+        .mobile-menu{position:fixed;top:0;right:-320px;width:300px;max-width:85vw;height:100vh;background:var(--dark-2);border-left:1px solid var(--glass-border);z-index:1055;transition:right .4s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+        .mobile-menu.active{right:0}
+        .mobile-menu-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--glass-border)}
+        .mobile-menu-close{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:10px;color:var(--white);cursor:pointer;font-size:1.1rem;transition:all .3s}
+        .mobile-menu-close:hover{background:var(--primary);border-color:var(--primary)}
+        .mobile-menu-body{flex:1;padding:24px;overflow-y:auto}
+        .mobile-nav-link{display:flex;align-items:center;gap:14px;padding:14px 16px;color:var(--gray-light);text-decoration:none;font-weight:500;font-size:.95rem;text-transform:uppercase;letter-spacing:1px;border-radius:12px;transition:all .3s;margin-bottom:4px}
+        .mobile-nav-link:hover,.mobile-nav-link.active{color:var(--white);background:rgba(230,57,70,.1)}
+        .mobile-nav-link i{width:20px;text-align:center;color:var(--primary);font-size:.9rem}
+        .mobile-menu-footer{padding:20px 24px;border-top:1px solid var(--glass-border)}
+
+        .cart-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:9998;opacity:0;visibility:hidden;transition:all .3s}
+        .cart-overlay.active{opacity:1;visibility:visible}
+        .cart-sidebar{position:fixed;top:0;right:-400px;width:370px;max-width:90vw;height:100vh;background:var(--dark-2);border-left:1px solid var(--glass-border);z-index:9999;transition:right .4s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+        .cart-sidebar.active{right:0}
+        .cart-header{display:flex;justify-content:space-between;align-items:center;padding:22px;border-bottom:1px solid var(--glass-border)}
+        .cart-header h5{margin:0;font-weight:700;font-size:1rem}
+        .cart-close{background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;transition:color .3s}
+        .cart-close:hover{color:var(--primary)}
+        .cart-body{flex:1;overflow-y:auto;padding:22px}
+        .cart-empty{text-align:center;padding:40px 0;color:var(--gray)}
+        .cart-empty i{font-size:2.5rem;margin-bottom:14px;display:block;color:var(--dark-5)}
+        .cart-footer{padding:22px;border-top:1px solid var(--glass-border)}
+        .cart-total{display:flex;justify-content:space-between;margin-bottom:14px}
+        .cart-total span{font-weight:700;font-size:1.05rem}
+        .btn-checkout{background:var(--gradient-1);border:none;padding:13px;border-radius:12px;color:var(--white);font-weight:700;text-transform:uppercase;letter-spacing:1px;width:100%;transition:all .3s;cursor:pointer;font-size:.9rem}
+        .btn-checkout:hover{box-shadow:0 8px 25px rgba(230,57,70,.4);transform:translateY(-2px)}
+
+        .toast-notification{position:fixed;top:100px;right:24px;background:var(--dark-3);border:1px solid var(--glass-border);border-left:4px solid var(--primary);padding:14px 22px;border-radius:12px;z-index:10000;display:flex;align-items:center;gap:10px;transform:translateX(150%);transition:transform .4s ease;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+        .toast-notification.show{transform:translateX(0)}
+        .toast-notification i{color:var(--primary);font-size:1.1rem}
+        .toast-notification span{font-size:.88rem;font-weight:500}
+
+        /* ===== PAGE HEADER ===== */
+        .page-header{position:relative;padding:180px 0 100px;overflow:hidden;text-align:center}
+        .page-header-bg{position:absolute;top:0;left:0;width:100%;height:100%;background:url('https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat}
+        .page-header-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(10,10,10,.94),rgba(10,10,10,.8),rgba(10,10,10,.92))}
+        .page-header-content{position:relative;z-index:2}
+        .page-header h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;margin-bottom:12px;line-height:1.1}
+        .page-header h1 span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .page-header p{color:var(--gray);font-size:1.1rem;max-width:600px;margin:0 auto}
+        .breadcrumb-custom{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;list-style:none;padding:0}
+        .breadcrumb-custom li{font-size:.88rem}
+        .breadcrumb-custom li a{color:var(--orange);text-decoration:none;transition:color .3s}
+        .breadcrumb-custom li a:hover{color:var(--orange-light)}
+        .breadcrumb-custom li span{color:var(--gray)}
+        .breadcrumb-custom li+li::before{content:'/';color:var(--gray);margin-right:8px;font-size:.8rem}
+        .page-header-particles{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
+        .ph-particle{position:absolute;width:4px;height:4px;background:var(--orange);border-radius:50%;opacity:0;animation:float-particle 6s infinite}
+        @keyframes float-particle{0%{opacity:0;transform:translateY(100vh) scale(0)}10%{opacity:.7}90%{opacity:.7}100%{opacity:0;transform:translateY(-10vh) scale(1)}}
+
+        .section-padding{padding:80px 0}
+        .section-label{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--orange);margin-bottom:14px}
+        .section-label::before,.section-label::after{content:'';width:30px;height:1px;background:var(--orange)}
+        .section-title{font-size:clamp(1.9rem,4vw,3rem);font-weight:800;margin-bottom:14px}
+        .highlight{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+        .story-section{background:var(--dark-2)}
+        .story-img-wrapper{position:relative;border-radius:24px;overflow:hidden}
+        .story-img-wrapper img{width:100%;height:520px;object-fit:cover;border-radius:24px;transition:transform .8s}
+        .story-img-wrapper:hover img{transform:scale(1.03)}
+        .story-img-badge{position:absolute;bottom:28px;left:-18px;background:var(--gradient-1);padding:20px 28px;border-radius:18px;text-align:center;box-shadow:0 15px 40px rgba(230,57,70,.4)}
+        .story-img-badge h3{font-size:2.5rem;font-weight:900;margin:0}
+        .story-img-badge p{font-size:.82rem;text-transform:uppercase;letter-spacing:1px;margin:0}
+        .story-text{color:var(--gray);line-height:1.9;font-size:.95rem}
+        .story-text strong{color:var(--white)}
+        .story-signature{font-family:'Dancing Script',cursive;font-size:2rem;color:var(--orange);margin-top:20px}
+
+        .value-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:24px;padding:36px 28px;text-align:center;transition:all .5s;height:100%}
+        .value-card:hover{border-color:rgba(230,57,70,.3);transform:translateY(-8px);box-shadow:0 20px 60px rgba(230,57,70,.12)}
+        .value-icon{width:72px;height:72px;display:inline-flex;align-items:center;justify-content:center;background:rgba(230,57,70,.1);border-radius:20px;font-size:1.6rem;color:var(--primary);margin-bottom:20px;transition:all .4s}
+        .value-card:hover .value-icon{background:var(--gradient-1);color:var(--white);transform:scale(1.1)}
+        .value-card h4{font-size:1.2rem;font-weight:700;margin-bottom:10px}
+        .value-card p{color:var(--gray);font-size:.88rem;line-height:1.7;margin:0}
+
+        .timeline-section{background:var(--dark)}
+        .timeline{position:relative;max-width:900px;margin:0 auto}
+        .timeline::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:2px;height:100%;background:linear-gradient(180deg,var(--primary),var(--orange),var(--primary));border-radius:1px}
+        .timeline-item{position:relative;padding:0 0 60px;display:flex;align-items:flex-start}
+        .timeline-item:last-child{padding-bottom:0}
+        .timeline-dot{position:absolute;left:50%;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:var(--gradient-1);border:4px solid var(--dark);z-index:2;box-shadow:0 0 20px rgba(230,57,70,.4)}
+        .timeline-content{width:45%;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:28px;transition:all .4s}
+        .timeline-content:hover{border-color:rgba(230,57,70,.3);transform:translateY(-4px);box-shadow:0 15px 40px rgba(230,57,70,.1)}
+        .timeline-item:nth-child(odd) .timeline-content{margin-right:auto}
+        .timeline-item:nth-child(even) .timeline-content{margin-left:auto}
+        .timeline-year{display:inline-block;background:var(--gradient-1);padding:4px 16px;border-radius:50px;font-size:.82rem;font-weight:700;letter-spacing:1px;margin-bottom:10px}
+        .timeline-content h4{font-size:1.1rem;font-weight:700;margin-bottom:6px}
+        .timeline-content p{color:var(--gray);font-size:.88rem;line-height:1.7;margin:0}
+        .timeline-img{width:100%;height:180px;object-fit:cover;border-radius:14px;margin-bottom:14px}
+
+        .chef-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;overflow:hidden;text-align:center;transition:all .4s}
+        .chef-card:hover{transform:translateY(-8px);border-color:rgba(230,57,70,.3);box-shadow:0 20px 50px rgba(230,57,70,.15)}
+        .chef-card-img{height:300px;overflow:hidden}
+        .chef-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s;filter:grayscale(40%)}
+        .chef-card:hover .chef-card-img img{transform:scale(1.05);filter:grayscale(0%)}
+        .chef-card-body{padding:20px}
+        .chef-card-body h5{font-size:1.1rem;font-weight:700}
+        .chef-card-body p{color:var(--orange);font-size:.82rem;font-weight:500}
+        .chef-socials{display:flex;justify-content:center;gap:10px;margin-top:10px}
+        .chef-socials a{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:50%;color:var(--gray);text-decoration:none;transition:all .3s;font-size:.82rem}
+        .chef-socials a:hover{background:var(--gradient-1);color:var(--white);border-color:transparent}
+
+        .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,240px);gap:14px}
+        .gallery-item{position:relative;border-radius:16px;overflow:hidden;cursor:pointer}
+        .gallery-item:nth-child(1){grid-column:span 2;grid-row:span 2}
+        .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+        .gallery-item:hover img{transform:scale(1.1)}
+        .gallery-item-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,transparent 40%,rgba(230,57,70,.8) 100%);opacity:0;transition:opacity .4s;display:flex;align-items:flex-end;padding:20px}
+        .gallery-item:hover .gallery-item-overlay{opacity:1}
+
+        .stats-bar{background:var(--gradient-1);padding:50px 0;position:relative;overflow:hidden}
+        .stats-bar::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 60%);border-radius:50%}
+        .stat-item{text-align:center}
+        .stat-number{font-size:2.8rem;font-weight:900;text-shadow:0 4px 20px rgba(0,0,0,.2)}
+        .stat-label{font-size:.82rem;text-transform:uppercase;letter-spacing:1px;opacity:.9}
+
+        .quote-section{background:var(--dark-2)}
+        .quote-block{position:relative;max-width:800px;margin:0 auto;text-align:center}
+        .quote-mark{font-size:6rem;line-height:1;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.3;position:absolute;top:-30px;left:-10px}
+        .quote-text{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-style:italic;line-height:1.8;color:var(--gray-light)}
+        .quote-author{margin-top:24px;color:var(--orange);font-weight:600;font-size:1rem}
+        .quote-role{color:var(--gray);font-size:.85rem}
+
+        .footer{background:var(--dark);padding-top:60px;border-top:1px solid var(--glass-border)}
+        .footer-brand{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+        .footer-brand i{color:var(--primary)}
+        .footer-brand span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .footer-bottom{border-top:1px solid var(--glass-border);padding:20px 0;margin-top:50px;text-align:center;color:var(--gray);font-size:.82rem}
+
+        .back-to-top{position:fixed;bottom:24px;right:24px;width:46px;height:46px;background:var(--gradient-1);border:none;border-radius:50%;color:var(--white);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;opacity:0;visibility:hidden;transition:all .4s;z-index:999;box-shadow:0 5px 20px rgba(230,57,70,.4)}
+        .back-to-top.visible{opacity:1;visibility:visible}
+        .back-to-top:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(230,57,70,.6)}
+
+        .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}
+        .reveal.active{opacity:1;transform:translateY(0)}
+        .reveal-left{opacity:0;transform:translateX(-50px);transition:opacity .8s,transform .8s}
+        .reveal-left.active{opacity:1;transform:translateX(0)}
+        .reveal-right{opacity:0;transform:translateX(50px);transition:opacity .8s,transform .8s}
+        .reveal-right.active{opacity:1;transform:translateX(0)}
+
+        @media(max-width:991px){
+            .section-padding{padding:60px 0}
+            .story-img-wrapper img{height:400px}
+            .gallery-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,200px)}
+            .gallery-item:nth-child(1){grid-column:span 2;grid-row:span 1}
+            .chef-card-img{height:240px}
+            .timeline::before{left:20px}
+            .timeline-dot{left:20px}
+            .timeline-content{width:calc(100% - 60px)!important;margin-left:50px!important;margin-right:0!important}
+        }
+        @media(max-width:767px){
+            .section-padding{padding:50px 0}
+            .page-header{padding:150px 0 70px}
+            .story-img-wrapper img{height:300px}
+            .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,180px)}
+            .gallery-item:nth-child(1){grid-column:span 2}
+            .stat-number{font-size:2rem}
+            .chef-card-img{height:220px}
+            .quote-mark{font-size:4rem;top:-20px}
+        }
+        @media(max-width:575px){
+            .gallery-grid{grid-template-columns:1fr;grid-template-rows:auto}
+            .gallery-item{height:200px}
+            .gallery-item:nth-child(1){grid-column:span 1}
+        }
+    </style>
+</head>
+<body>
+
+<div id="preloader"><div class="loader-pizza"></div></div>
+
+<div class="toast-notification" id="toast"><i class="fas fa-check-circle"></i><span id="toast-message">Item added!</span></div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h5><i class="fas fa-shopping-bag me-2" style="color:var(--primary)"></i>Your Order</h5>
+        <button class="cart-close" id="cartClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-body" id="cartBody">
+        <div class="cart-empty"><i class="fas fa-pizza-slice"></i><p>Your cart is empty</p></div>
+    </div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total:</span><span id="cartTotal">$0.00</span></div>
+        <button class="btn-checkout" onclick="showToast('Checkout coming soon!')">Checkout</button>
+    </div>
+</div>
+
+<div class="mobile-menu-overlay" id="mobileOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <a class="navbar-brand-custom" href="pizza.html" style="font-size:1.5rem" onclick="closeMobileMenu()"><i class="fas fa-fire"></i><span>Fuoco</span></a>
+        <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mobile-menu-body">
+        <a href="pizza.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-home"></i>Home</a>
+        <a href="aboutus.html" class="mobile-nav-link active" onclick="closeMobileMenu()"><i class="fas fa-info-circle"></i>About</a>
+        <a href="menu.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-utensils"></i>Menu</a>
+        <a href="contact.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-phone"></i>Contact</a>
+    </div>
+    <div class="mobile-menu-footer">
+        <a href="contact.html" class="btn-order-nav w-100 text-center d-block" onclick="closeMobileMenu()" style="border-radius:14px;padding:14px">Order Now</a>
+    </div>
+</div>
+
+<!-- Navbar — Fixed desktop layout -->
+<nav class="navbar-custom" id="mainNav">
+    <div class="container">
+        <div class="navbar-inner">
+            <a class="navbar-brand-custom" href="pizza.html">
+                <i class="fas fa-fire"></i>
+                <span>Fuoco</span>
+            </a>
+            <div class="navbar-nav-center">
+                <a href="pizza.html" class="nav-link-custom">Home</a>
+                <a href="aboutus.html" class="nav-link-custom active">About</a>
+                <a href="menu.html" class="nav-link-custom">Menu</a>
+                <a href="contact.html" class="nav-link-custom">Contact</a>
+            </div>
+            <div class="navbar-right">
+                <button class="cart-btn-nav" onclick="toggleCart()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+                </button>
+                <a href="contact.html" class="btn-order-nav glow-btn d-none d-md-inline-flex">Order Now</a>
+                <button class="burger-btn d-lg-none" id="burgerBtn" aria-label="Menu">
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+    <div class="page-header-bg"></div>
+    <div class="page-header-overlay"></div>
+    <div class="page-header-particles" id="headerParticles"></div>
+    <div class="page-header-content">
+        <div class="container">
+            <h1>Our <span>Story</span></h1>
+            <p>From a small kitchen in Naples to the heart of New York — discover the passion, tradition, and fire behind every Fuoco pizza.</p>
+            <ul class="breadcrumb-custom">
+                <li><a href="pizza.html">Home</a></li>
+                <li><span>About Us</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ===== OUR STORY ===== -->
+<section class="story-section section-padding">
+    <div class="container">
+        <div class="row align-items-center g-4 g-lg-5">
+            <div class="col-lg-6 reveal-left">
+                <div class="story-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=700&q=80" alt="Chef preparing pizza">
+                    <div class="story-img-badge"><h3>15+</h3><p>Years of<br>Excellence</p></div>
+                </div>
+            </div>
+            <div class="col-lg-6 reveal-right">
+                <div class="section-label">Our Story</div>
+                <h2 class="section-title">Where <span class="highlight">Fire Meets Passion</span></h2>
+                <p class="story-text">Fuoco was born from a simple dream — to bring the authentic taste of Naples to the world. Our founder, <strong>Marco Rossi</strong>, grew up in a small coastal town outside Naples, watching his grandmother knead dough every Sunday morning. The aroma of fresh basil, the crackle of the wood-fired oven, the joy of family gathered around a table — these were the moments that shaped his soul.</p>
+                <p class="story-text">In <strong>2009</strong>, Marco left Italy with nothing but his grandmother's recipe book and a burning passion. He arrived in New York with a mission: to create pizza that doesn't just feed people — it <strong>tells a story</strong>. He found a tiny storefront in Manhattan, built a brick oven by hand, and opened Fuoco — Italian for "fire" — named after the flame that transforms simple ingredients into something extraordinary.</p>
+                <p class="story-text">Those early days were hard. Marco slept in the kitchen, worked 18-hour days, and served just a handful of customers. But word spread quickly. People tasted the difference — the 72-hour fermented dough, the San Marzano tomatoes imported from Italy, the fresh mozzarella made daily. Within a year, lines stretched around the block.</p>
+                <div class="story-signature">— Marco Rossi, Founder</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== QUOTE ===== -->
+<section class="quote-section section-padding">
+    <div class="container">
+        <div class="quote-block reveal">
+            <div class="quote-mark">"</div>
+            <p class="quote-text">Pizza is not just food. It is a love letter written in dough, sauce, and fire. Every pie that leaves our kitchen carries a piece of my grandmother's soul and the warmth of Naples.</p>
+            <div class="quote-author">Marco Rossi</div>
+            <div class="quote-role">Founder & Head Pizzaiolo</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<section class="stats-bar">
+    <div class="container position-relative" style="z-index:2">
+        <div class="row g-4">
+            <div class="col-6 col-md-3"><div class="stat-item"><div class="stat-number" data-target="15">0</div><div class="stat-label">Years of Legacy</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-item"><div class="stat-number" data-target="50000">0</div><div class="stat-label">Happy Customers</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-item"><div class="stat-number" data-target="120">0</div><div class="stat-label">Pizza Varieties</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-item"><div class="stat-number" data-target="35">0</div><div class="stat-label">Awards Won</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== OUR VALUES ===== -->
+<section class="section-padding" style="background:var(--dark-2)">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <div class="section-label">Our Values</div>
+            <h2 class="section-title">What We <span class="highlight">Stand For</span></h2>
+            <p style="color:var(--gray);max-width:580px;margin:0 auto;font-size:.95rem">These core values guide every decision we make, every ingredient we source, and every pizza we craft.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-lg-3 reveal"><div class="value-card"><div class="value-icon"><i class="fas fa-fire"></i></div><h4>Authenticity</h4><p>Staying true to Neapolitan traditions — from hand-stretched dough to wood-fired baking at 900°F.</p></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="value-card"><div class="value-icon"><i class="fas fa-leaf"></i></div><h4>Freshness</h4><p>Locally sourced organic produce, imported Italian ingredients, and everything made fresh daily.</p></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="value-card"><div class="value-icon"><i class="fas fa-heart"></i></div><h4>Passion</h4><p>Every pizza is crafted with love, dedication, and an unwavering commitment to excellence.</p></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="value-card"><div class="value-icon"><i class="fas fa-users"></i></div><h4>Community</h4><p>Building connections through shared meals, creating a warm home for families and friends.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TIMELINE ===== -->
+<section class="timeline-section section-padding">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <div class="section-label">Our Journey</div>
+            <h2 class="section-title">The Fuoco <span class="highlight">Timeline</span></h2>
+            <p style="color:var(--gray);max-width:580px;margin:0 auto;font-size:.95rem">From a dream in Naples to becoming New York's most beloved pizzeria — every milestone tells our story.</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=500&q=80" alt="First Restaurant" class="timeline-img"><span class="timeline-year">2009</span><h4>The First Spark</h4><p>Marco Rossi opens the first Fuoco in a tiny Manhattan storefront, hand-building the brick oven himself.</p></div></div>
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=500&q=80" alt="Award" class="timeline-img"><span class="timeline-year">2011</span><h4>First Award</h4><p>Fuoco wins "Best New Pizzeria" from New York Food Magazine. The team grows from 3 to 15 members.</p></div></div>
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=500&q=80" alt="Second Location" class="timeline-img"><span class="timeline-year">2013</span><h4>Second Location</h4><p>After overwhelming demand, Fuoco opens its second location in Brooklyn with an open kitchen.</p></div></div>
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80" alt="Delivery" class="timeline-img"><span class="timeline-year">2015</span><h4>Delivery Launch</h4><p>Fuoco launches delivery with a custom heat-retaining box. "30 minutes or free" becomes iconic.</p></div></div>
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=500&q=80" alt="100k" class="timeline-img"><span class="timeline-year">2017</span><h4>100K Customers</h4><p>Fuoco serves its 100,000th customer. NYC Mayor declares "Fuoco Pizza Day" on March 15th.</p></div></div>
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=500&q=80" alt="Anniversary" class="timeline-img"><span class="timeline-year">2019</span><h4>10 Year Anniversary</h4><p>A decade of fire! Fuoco celebrates with a street festival and opens location #3 in Queens.</p></div></div>
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?auto=format&fit=crop&w=500&q=80" alt="Innovation" class="timeline-img"><span class="timeline-year">2021</span><h4>Innovation & Resilience</h4><p>Through the pandemic, Fuoco pivots to contactless "Oven-to-Door" and launches gluten-free options.</p></div></div>
+            <div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-content"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80" alt="Today" class="timeline-img"><span class="timeline-year">2024</span><h4>The Fuoco Family Today</h4><p>5 locations, 120+ varieties, 50,000+ happy customers, 35+ awards. Marco still makes dough every morning.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CHEFS ===== -->
+<section class="section-padding" style="background:var(--dark-2)">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <div class="section-label">Our Team</div>
+            <h2 class="section-title">Meet the <span class="highlight">Master Chefs</span></h2>
+            <p style="color:var(--gray);max-width:580px;margin:0 auto;font-size:.95rem">The passionate artisans behind every perfect pizza at Fuoco — trained in Italy, dedicated in New York.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-lg-3 reveal"><div class="chef-card"><div class="chef-card-img"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80" alt="Marco"></div><div class="chef-card-body"><h5>Marco Rossi</h5><p>Founder & Head Pizzaiolo</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="chef-card"><div class="chef-card-img"><img src="https://images.unsplash.com/photo-1583394293214-28ez1c9f7587?auto=format&fit=crop&w=400&q=80" alt="Lucia"></div><div class="chef-card-body"><h5>Lucia Ferrara</h5><p>Pastry & Dessert Chef</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="chef-card"><div class="chef-card-img"><img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=400&q=80" alt="Antonio"></div><div class="chef-card-body"><h5>Antonio Bianchi</h5><p>Sous Chef</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="chef-card"><div class="chef-card-img"><img src="https://images.unsplash.com/photo-1556909114-44e3e70034e2?auto=format&fit=crop&w=400&q=80" alt="Sofia"></div><div class="chef-card-body"><h5>Sofia Marino</h5><p>Sauce Specialist</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== GALLERY ===== -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <div class="section-label">Gallery</div>
+            <h2 class="section-title">Inside <span class="highlight">Fuoco</span></h2>
+        </div>
+        <div class="gallery-grid reveal">
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80" alt="Pizza"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=500&q=80" alt="Kitchen"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=500&q=80" alt="Interior"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?auto=format&fit=crop&w=500&q=80" alt="Making"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80" alt="Fresh Pizza"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section-padding" style="background:var(--dark-2)">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Join Us</div>
+            <h2 class="section-title">Ready to Taste the <span class="highlight">Difference?</span></h2>
+            <p style="color:var(--gray);max-width:580px;margin:0 auto 30px;font-size:.95rem">Book a table or order online — experience the fire, the flavor, and the family of Fuoco.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="contact.html" class="btn-order-nav glow-btn" style="padding:14px 36px;font-size:.9rem;border-radius:50px"><i class="fas fa-calendar-alt me-2"></i>Reserve a Table</a>
+                <a href="menu.html" style="border:2px solid rgba(255,255,255,.3);color:var(--white);padding:12px 34px;border-radius:50px;font-weight:600;font-size:.9rem;text-decoration:none;text-transform:uppercase;letter-spacing:1px;transition:all .4s" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)';this.style.background='rgba(247,127,0,.1)'" onmouseout="this.style.borderColor='rgba(255,255,255,.3)';this.style.color='var(--white)';this.style.background='transparent'"><i class="fas fa-utensils me-2"></i>View Menu</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="footer-brand"><i class="fas fa-fire"></i><span>Fuoco</span></div>
+                <p style="color:var(--gray);font-size:.88rem;line-height:1.7">Authentic wood-fired pizza crafted with passion since 2009. From Naples to New York — every slice tells our story.</p>
+            </div>
+            <div class="col-lg-6 text-lg-end">
+                <p style="color:var(--gray);font-size:.88rem"><i class="fas fa-map-marker-alt me-2" style="color:var(--primary)"></i>123 Pizza Avenue, New York, NY 10001<br><i class="fas fa-phone me-2" style="color:var(--primary)"></i>+1 (555) 123-4567<br><i class="fas fa-envelope me-2" style="color:var(--primary)"></i>hello@fuocopizza.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2024 Fuoco Pizza. All Rights Reserved. Made with <i class="fas fa-heart" style="color:var(--primary)"></i></div>
+    </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-chevron-up"></i></button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function toggleCart(){document.getElementById('cartSidebar').classList.toggle('active');document.getElementById('cartOverlay').classList.toggle('active')}
+document.getElementById('cartClose').addEventListener('click',toggleCart);
+document.getElementById('cartOverlay').addEventListener('click',toggleCart);
+
+function openMobileMenu(){document.getElementById('mobileMenu').classList.add('active');document.getElementById('mobileOverlay').classList.add('active');document.getElementById('burgerBtn').classList.add('active');document.body.style.overflow='hidden'}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('active');document.getElementById('mobileOverlay').classList.remove('active');document.getElementById('burgerBtn').classList.remove('active');document.body.style.overflow=''}
+document.getElementById('burgerBtn').addEventListener('click',openMobileMenu);
+document.getElementById('mobileMenuClose').addEventListener('click',closeMobileMenu);
+document.getElementById('mobileOverlay').addEventListener('click',closeMobileMenu);
+
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toast-message').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('preloader').classList.add('hidden'),600)});
+
+window.addEventListener('scroll',()=>{
+    document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>80);
+    document.getElementById('backToTop').classList.toggle('visible',window.scrollY>400);
+});
+
+const revealObs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('active'),i*80);revealObs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>{if(!el.classList.contains('active'))revealObs.observe(el)});
+
+const counterObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){const target=+entry.target.dataset.target;const start=performance.now();function update(now){const elapsed=now-start;const progress=Math.min(elapsed/2000,1);const eased=1-Math.pow(1-progress,3);let val=Math.floor(eased*target);entry.target.textContent=target>=1000?(val>=49000?'50K+':(val/1000)+'K+'):val+'+';if(progress<1)requestAnimationFrame(update)}requestAnimationFrame(update);counterObs.unobserve(entry.target)}})},{threshold:.5});
+document.querySelectorAll('.stat-number').forEach(c=>counterObs.observe(c));
+
+(function(){const c=document.getElementById('headerParticles');for(let i=0;i<15;i++){const p=document.createElement('div');p.classList.add('ph-particle');p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*6+'s';p.style.animationDuration=(4+Math.random()*4)+'s';const s=2+Math.random()*3;p.style.width=s+'px';p.style.height=s+'px';c.appendChild(p)}})();
+</script>
+</body>
+</html>

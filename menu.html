@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu — Fuoco Pizza | Wood-Fired Pizzas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Poppins:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--primary:#e63946;--primary-dark:#c1121f;--orange:#f77f00;--orange-light:#fcbf49;--dark:#0a0a0a;--dark-2:#111111;--dark-3:#1a1a1a;--dark-4:#222222;--dark-5:#2a2a2a;--white:#ffffff;--gray:#b0b0b0;--gray-light:#d4d4d4;--glass-bg:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.08);--gradient-1:linear-gradient(135deg,#e63946,#f77f00);--gradient-2:linear-gradient(135deg,#f77f00,#fcbf49);--gradient-3:linear-gradient(135deg,#e63946,#c1121f)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Poppins',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden}
+        h1,h2,h3,h4,h5{font-family:'Playfair Display',serif}
+        ::-webkit-scrollbar{width:8px}
+        ::-webkit-scrollbar-track{background:var(--dark)}
+        ::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+
+        #preloader{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dark);z-index:99999;display:flex;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+        #preloader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .loader-pizza{width:60px;height:60px;border:4px solid rgba(230,57,70,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        /* ===== NAVBAR ===== */
+        .navbar-custom{background:rgba(10,10,10,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:10px 0;z-index:1050;border-bottom:1px solid var(--glass-border);position:fixed;top:0;left:0;right:0;transition:all .4s}
+        .navbar-custom.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.5)}
+        .navbar-inner{display:flex;align-items:center;justify-content:space-between;width:100%}
+        .navbar-brand-custom{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;color:var(--white)!important;text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0}
+        .navbar-brand-custom i{color:var(--primary);font-size:1.4rem}
+        .navbar-brand-custom span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .navbar-nav-center{display:none;align-items:center;gap:4px;position:absolute;left:50%;transform:translateX(-50%)}
+        @media(min-width:992px){.navbar-nav-center{display:flex}}
+        .nav-link-custom{color:var(--gray-light)!important;font-weight:500;font-size:.88rem;text-transform:uppercase;letter-spacing:1px;padding:8px 14px!important;position:relative;transition:color .3s;text-decoration:none;white-space:nowrap}
+        .nav-link-custom::after{content:'';position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--gradient-1);transition:all .3s;transform:translateX(-50%)}
+        .nav-link-custom:hover{color:var(--white)!important}
+        .nav-link-custom:hover::after{width:60%}
+        .nav-link-custom.active{color:var(--white)!important}
+        .nav-link-custom.active::after{width:60%}
+        .navbar-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+        .btn-order-nav{background:var(--gradient-1);color:var(--white)!important;border:none;padding:10px 26px;border-radius:50px;font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:1px;position:relative;overflow:hidden;transition:all .3s;box-shadow:0 0 20px rgba(230,57,70,.3);text-decoration:none}
+        .btn-order-nav:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(230,57,70,.5);color:var(--white)!important}
+        .btn-order-nav::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shimmer 2s infinite}
+        @keyframes shimmer{to{left:100%}}
+        .cart-badge{position:absolute;top:-5px;right:-5px;background:var(--primary);width:18px;height:18px;border-radius:50%;font-size:.6rem;display:flex;align-items:center;justify-content:center;font-weight:700}
+        .glow-btn{position:relative}
+        .glow-btn::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(230,57,70,.4);border-radius:50%;transform:translate(-50%,-50%);transition:width .6s,height .6s;z-index:-1}
+        .glow-btn:hover::after{width:200%;height:200%}
+        .cart-btn-nav{background:none;border:none;color:var(--white);font-size:1.15rem;cursor:pointer;padding:0;position:relative;transition:color .3s}
+        .cart-btn-nav:hover{color:var(--orange)}
+        .burger-btn{width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:12px;cursor:pointer;padding:10px;transition:all .3s}
+        .burger-btn:hover{border-color:rgba(230,57,70,.3)}
+        .burger-line{width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s;transform-origin:center}
+        .burger-btn.active .burger-line:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+        .burger-btn.active .burger-line:nth-child(2){opacity:0;transform:scaleX(0)}
+        .burger-btn.active .burger-line:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
+
+        .mobile-menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1040;opacity:0;visibility:hidden;transition:all .4s;backdrop-filter:blur(4px)}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible}
+        .mobile-menu{position:fixed;top:0;right:-320px;width:300px;max-width:85vw;height:100vh;background:var(--dark-2);border-left:1px solid var(--glass-border);z-index:1055;transition:right .4s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+        .mobile-menu.active{right:0}
+        .mobile-menu-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--glass-border)}
+        .mobile-menu-close{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:10px;color:var(--white);cursor:pointer;font-size:1.1rem;transition:all .3s}
+        .mobile-menu-close:hover{background:var(--primary);border-color:var(--primary)}
+        .mobile-menu-body{flex:1;padding:24px;overflow-y:auto}
+        .mobile-nav-link{display:flex;align-items:center;gap:14px;padding:14px 16px;color:var(--gray-light);text-decoration:none;font-weight:500;font-size:.95rem;text-transform:uppercase;letter-spacing:1px;border-radius:12px;transition:all .3s;margin-bottom:4px}
+        .mobile-nav-link:hover,.mobile-nav-link.active{color:var(--white);background:rgba(230,57,70,.1)}
+        .mobile-nav-link i{width:20px;text-align:center;color:var(--primary);font-size:.9rem}
+        .mobile-menu-footer{padding:20px 24px;border-top:1px solid var(--glass-border)}
+
+        .cart-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:9998;opacity:0;visibility:hidden;transition:all .3s}
+        .cart-overlay.active{opacity:1;visibility:visible}
+        .cart-sidebar{position:fixed;top:0;right:-400px;width:370px;max-width:90vw;height:100vh;background:var(--dark-2);border-left:1px solid var(--glass-border);z-index:9999;transition:right .4s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+        .cart-sidebar.active{right:0}
+        .cart-header{display:flex;justify-content:space-between;align-items:center;padding:22px;border-bottom:1px solid var(--glass-border)}
+        .cart-header h5{margin:0;font-weight:700;font-size:1rem}
+        .cart-close{background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;transition:color .3s}
+        .cart-close:hover{color:var(--primary)}
+        .cart-body{flex:1;overflow-y:auto;padding:22px}
+        .cart-item{display:flex;gap:12px;padding:12px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:12px;margin-bottom:10px}
+        .cart-item-img{width:56px;height:56px;border-radius:10px;object-fit:cover}
+        .cart-item-info{flex:1}
+        .cart-item-info h6{font-size:.85rem;font-weight:600;margin-bottom:3px}
+        .cart-item-info span{color:var(--orange);font-weight:700;font-size:.82rem}
+        .cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:4px}
+        .cart-item-qty button{width:24px;height:24px;border-radius:6px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--white);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+        .cart-item-qty button:hover{background:var(--primary);border-color:var(--primary)}
+        .cart-item-qty span{font-size:.82rem;font-weight:600;min-width:18px;text-align:center;color:var(--white)}
+        .cart-item-remove{background:none;border:none;color:var(--gray);cursor:pointer;font-size:.78rem;transition:color .3s;align-self:flex-start}
+        .cart-item-remove:hover{color:var(--primary)}
+        .cart-empty{text-align:center;padding:40px 0;color:var(--gray)}
+        .cart-empty i{font-size:2.5rem;margin-bottom:14px;display:block;color:var(--dark-5)}
+        .cart-footer{padding:22px;border-top:1px solid var(--glass-border)}
+        .cart-total{display:flex;justify-content:space-between;margin-bottom:14px}
+        .cart-total span{font-weight:700;font-size:1.05rem}
+        .btn-checkout{background:var(--gradient-1);border:none;padding:13px;border-radius:12px;color:var(--white);font-weight:700;text-transform:uppercase;letter-spacing:1px;width:100%;transition:all .3s;cursor:pointer;font-size:.9rem}
+        .btn-checkout:hover{box-shadow:0 8px 25px rgba(230,57,70,.4);transform:translateY(-2px)}
+
+        .toast-notification{position:fixed;top:100px;right:24px;background:var(--dark-3);border:1px solid var(--glass-border);border-left:4px solid var(--primary);padding:14px 22px;border-radius:12px;z-index:10000;display:flex;align-items:center;gap:10px;transform:translateX(150%);transition:transform .4s ease;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+        .toast-notification.show{transform:translateX(0)}
+        .toast-notification i{color:var(--primary);font-size:1.1rem}
+        .toast-notification span{font-size:.88rem;font-weight:500}
+
+        /* ===== PAGE HEADER ===== */
+        .page-header{position:relative;padding:180px 0 100px;overflow:hidden;text-align:center}
+        .page-header-bg{position:absolute;top:0;left:0;width:100%;height:100%;background:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat}
+        .page-header-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(10,10,10,.94),rgba(10,10,10,.75),rgba(10,10,10,.92))}
+        .page-header-content{position:relative;z-index:2}
+        .page-header h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;margin-bottom:12px;line-height:1.1}
+        .page-header h1 span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .page-header p{color:var(--gray);font-size:1.1rem;max-width:600px;margin:0 auto}
+        .breadcrumb-custom{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;list-style:none;padding:0}
+        .breadcrumb-custom li{font-size:.88rem}
+        .breadcrumb-custom li a{color:var(--orange);text-decoration:none;transition:color .3s}
+        .breadcrumb-custom li a:hover{color:var(--orange-light)}
+        .breadcrumb-custom li span{color:var(--gray)}
+        .breadcrumb-custom li+li::before{content:'/';color:var(--gray);margin-right:8px;font-size:.8rem}
+        .page-header-particles{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
+        .ph-particle{position:absolute;width:4px;height:4px;background:var(--orange);border-radius:50%;opacity:0;animation:float-particle 6s infinite}
+        @keyframes float-particle{0%{opacity:0;transform:translateY(100vh) scale(0)}10%{opacity:.7}90%{opacity:.7}100%{opacity:0;transform:translateY(-10vh) scale(1)}}
+
+        /* ===== SECTIONS ===== */
+        .section-padding{padding:80px 0}
+        .section-label{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--orange);margin-bottom:14px}
+        .section-label::before,.section-label::after{content:'';width:30px;height:1px;background:var(--orange)}
+        .section-title{font-size:clamp(1.9rem,4vw,3rem);font-weight:800;margin-bottom:14px}
+        .highlight{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+        /* ===== MENU FILTER ===== */
+        .menu-filter-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+        .menu-filter-btn{background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--gray);padding:10px 24px;border-radius:50px;font-weight:500;font-size:.85rem;cursor:pointer;transition:all .3s;font-family:'Poppins',sans-serif}
+        .menu-filter-btn:hover,.menu-filter-btn.active{background:var(--gradient-1);border-color:transparent;color:var(--white);box-shadow:0 5px 20px rgba(230,57,70,.3)}
+        .menu-filter-btn i{margin-right:6px}
+
+        /* ===== PIZZA CARDS ===== */
+        .pizza-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;overflow:hidden;transition:all .4s ease;height:100%;display:flex;flex-direction:column}
+        .pizza-card:hover{transform:translateY(-10px);border-color:rgba(230,57,70,.3);box-shadow:0 25px 60px rgba(230,57,70,.15)}
+        .pizza-card-img{position:relative;overflow:hidden;height:220px}
+        .pizza-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+        .pizza-card:hover .pizza-card-img img{transform:scale(1.1)}
+        .pizza-card-badge{position:absolute;top:12px;left:12px;background:var(--gradient-1);padding:5px 14px;border-radius:50px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+        .pizza-card-wishlist{position:absolute;top:12px;right:12px;width:34px;height:34px;background:rgba(0,0,0,.5);border:none;border-radius:50%;color:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;backdrop-filter:blur(10px);font-size:.85rem}
+        .pizza-card-wishlist:hover{background:var(--primary)}
+        .pizza-card-wishlist.liked{background:var(--primary)}
+        .pizza-card-wishlist.liked i{font-weight:900}
+        .pizza-card-body{padding:20px;flex:1;display:flex;flex-direction:column}
+        .pizza-card-rating{display:flex;align-items:center;gap:3px;margin-bottom:8px}
+        .pizza-card-rating i{color:var(--orange-light);font-size:.75rem}
+        .pizza-card-rating span{color:var(--gray);font-size:.78rem;margin-left:4px}
+        .pizza-card-name{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+        .pizza-card-ingredients{color:var(--gray);font-size:.82rem;line-height:1.5;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+        .pizza-card-footer{display:flex;align-items:center;justify-content:space-between}
+        .pizza-card-price{font-size:1.35rem;font-weight:800;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .btn-add-cart{background:var(--gradient-1);border:none;width:42px;height:42px;border-radius:12px;color:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:.95rem}
+        .btn-add-cart:hover{transform:scale(1.1);box-shadow:0 5px 20px rgba(230,57,70,.4)}
+
+        /* ===== CATEGORY SECTION ===== */
+        .category-section{margin-bottom:20px}
+        .category-header{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+        .category-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:var(--gradient-1);border-radius:14px;font-size:1.2rem;flex-shrink:0}
+        .category-header h3{font-size:1.5rem;font-weight:800;margin:0}
+        .category-header p{color:var(--gray);font-size:.85rem;margin:0}
+        .category-divider{height:1px;background:linear-gradient(90deg,var(--primary),transparent);margin:50px 0;opacity:.3}
+
+        /* ===== SPECIAL BANNER ===== */
+        .special-banner{position:relative;border-radius:24px;overflow:hidden;background:var(--gradient-1);padding:40px;margin-bottom:50px}
+        .special-banner::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 60%);border-radius:50%}
+        .special-banner-content{position:relative;z-index:2}
+        .special-banner h3{font-size:1.6rem;font-weight:800;margin-bottom:8px}
+        .special-banner p{opacity:.9;font-size:.95rem;margin-bottom:16px}
+        .special-banner .offer-code{display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.2);padding:8px 18px;border-radius:10px;font-weight:700;letter-spacing:2px;border:2px dashed rgba(255,255,255,.4);font-size:.85rem}
+
+        /* ===== FOOTER ===== */
+        .footer{background:var(--dark);padding-top:60px;border-top:1px solid var(--glass-border)}
+        .footer-brand{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+        .footer-brand i{color:var(--primary)}
+        .footer-brand span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .footer-desc{color:var(--gray);font-size:.88rem;line-height:1.7;margin-bottom:20px}
+        .footer-socials{display:flex;gap:10px}
+        .footer-socials a{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:50%;color:var(--gray);text-decoration:none;transition:all .3s;font-size:.92rem}
+        .footer-socials a:hover{background:var(--gradient-1);color:var(--white);border-color:transparent;transform:translateY(-3px)}
+        .footer-title{font-size:1.05rem;font-weight:700;margin-bottom:20px;position:relative;padding-bottom:10px}
+        .footer-title::after{content:'';position:absolute;bottom:0;left:0;width:36px;height:3px;background:var(--gradient-1);border-radius:2px}
+        .footer-links{list-style:none;padding:0;margin:0}
+        .footer-links li{margin-bottom:8px}
+        .footer-links a{color:var(--gray);text-decoration:none;font-size:.88rem;transition:all .3s;display:inline-flex;align-items:center;gap:8px}
+        .footer-links a:hover{color:var(--orange);padding-left:5px}
+        .footer-links a i{font-size:.6rem;color:var(--primary)}
+        .footer-hours{list-style:none;padding:0;margin:0}
+        .footer-hours li{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border);font-size:.88rem}
+        .footer-hours li span:first-child{color:var(--gray)}
+        .footer-hours li span:last-child{color:var(--white);font-weight:500}
+        .footer-contact-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+        .footer-contact-item i{color:var(--primary);margin-top:3px}
+        .footer-contact-item p{color:var(--gray);font-size:.88rem;margin:0}
+        .footer-bottom{border-top:1px solid var(--glass-border);padding:20px 0;margin-top:50px}
+
+        .back-to-top{position:fixed;bottom:24px;right:24px;width:46px;height:46px;background:var(--gradient-1);border:none;border-radius:50%;color:var(--white);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;opacity:0;visibility:hidden;transition:all .4s;z-index:999;box-shadow:0 5px 20px rgba(230,57,70,.4)}
+        .back-to-top.visible{opacity:1;visibility:visible}
+        .back-to-top:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(230,57,70,.6)}
+
+        .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}
+        .reveal.active{opacity:1;transform:translateY(0)}
+
+        @media(max-width:991px){
+            .section-padding{padding:60px 0}
+            .pizza-card-img{height:190px}
+        }
+        @media(max-width:767px){
+            .section-padding{padding:50px 0}
+            .page-header{padding:150px 0 70px}
+            .pizza-card-img{height:170px}
+            .special-banner{padding:28px 20px}
+            .special-banner h3{font-size:1.3rem}
+        }
+        @media(max-width:575px){
+            .pizza-card-img{height:160px}
+            .pizza-card-body{padding:14px}
+            .pizza-card-name{font-size:1rem}
+            .pizza-card-price{font-size:1.15rem}
+        }
+    </style>
+</head>
+<body>
+
+<div id="preloader"><div class="loader-pizza"></div></div>
+<div class="toast-notification" id="toast"><i class="fas fa-check-circle"></i><span id="toast-message">Added!</span></div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h5><i class="fas fa-shopping-bag me-2" style="color:var(--primary)"></i>Your Order</h5>
+        <button class="cart-close" id="cartClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-body" id="cartBody">
+        <div class="cart-empty"><i class="fas fa-pizza-slice"></i><p>Your cart is empty</p></div>
+    </div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total:</span><span id="cartTotal">$0.00</span></div>
+        <button class="btn-checkout" onclick="showToast('Checkout coming soon!')">Checkout</button>
+    </div>
+</div>
+
+<div class="mobile-menu-overlay" id="mobileOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <a class="navbar-brand-custom" href="pizza.html" style="font-size:1.5rem" onclick="closeMobileMenu()"><i class="fas fa-fire"></i><span>Fuoco</span></a>
+        <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mobile-menu-body">
+        <a href="pizza.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-home"></i>Home</a>
+        <a href="aboutus.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-info-circle"></i>About</a>
+        <a href="menu.html" class="mobile-nav-link active" onclick="closeMobileMenu()"><i class="fas fa-utensils"></i>Menu</a>
+        <a href="contact.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-phone"></i>Contact</a>
+    </div>
+    <div class="mobile-menu-footer">
+        <a href="contact.html" class="btn-order-nav w-100 text-center d-block" onclick="closeMobileMenu()" style="border-radius:14px;padding:14px">Order Now</a>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar-custom" id="mainNav">
+    <div class="container">
+        <div class="navbar-inner">
+            <a class="navbar-brand-custom" href="pizza.html"><i class="fas fa-fire"></i><span>Fuoco</span></a>
+            <div class="navbar-nav-center">
+                <a href="pizza.html" class="nav-link-custom">Home</a>
+                <a href="aboutus.html" class="nav-link-custom">About</a>
+                <a href="menu.html" class="nav-link-custom active">Menu</a>
+                <a href="contact.html" class="nav-link-custom">Contact</a>
+            </div>
+            <div class="navbar-right">
+                <button class="cart-btn-nav" onclick="toggleCart()"><i class="fas fa-shopping-bag"></i><span class="cart-badge" id="cartBadge" style="display:none;">0</span></button>
+                <a href="contact.html" class="btn-order-nav glow-btn d-none d-md-inline-flex">Order Now</a>
+                <button class="burger-btn d-lg-none" id="burgerBtn" aria-label="Menu"><span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span></button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+    <div class="page-header-bg"></div>
+    <div class="page-header-overlay"></div>
+    <div class="page-header-particles" id="headerParticles"></div>
+    <div class="page-header-content">
+        <div class="container">
+            <h1>Our <span>Menu</span></h1>
+            <p>Handcrafted with passion, baked in our wood-fired oven — explore 120+ varieties of authentic Neapolitan pizza.</p>
+            <ul class="breadcrumb-custom">
+                <li><a href="pizza.html">Home</a></li>
+                <li><span>Menu</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Special Banner -->
+<section class="section-padding pb-0">
+    <div class="container">
+        <div class="special-banner reveal">
+            <div class="special-banner-content">
+                <h3><i class="fas fa-gift me-2"></i>Friday Family Feast — 50% Off!</h3>
+                <p>Every Friday, enjoy half-price on all family-size pizzas. Limited time offer!</p>
+                <div class="offer-code"><i class="fas fa-tag"></i>FAMILY50</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu Section -->
+<section class="section-padding" id="menuSection">
+    <div class="container">
+        <div class="text-center mb-4 reveal">
+            <div class="section-label">Our Menu</div>
+            <h2 class="section-title">Explore Our <span class="highlight">Pizzas</span></h2>
+            <p style="color:var(--gray);max-width:580px;margin:0 auto">Filter by category or browse all — every pizza is made with premium ingredients and baked to perfection.</p>
+        </div>
+
+        <div class="menu-filter-btns reveal">
+            <button class="menu-filter-btn active" data-filter="all"><i class="fas fa-th-large"></i>All</button>
+            <button class="menu-filter-btn" data-filter="classic"><i class="fas fa-pizza-slice"></i>Classic</button>
+            <button class="menu-filter-btn" data-filter="premium"><i class="fas fa-crown"></i>Premium</button>
+            <button class="menu-filter-btn" data-filter="veggie"><i class="fas fa-leaf"></i>Veggie</button>
+            <button class="menu-filter-btn" data-filter="spicy"><i class="fas fa-pepper-hot"></i>Spicy</button>
+            <button class="menu-filter-btn" data-filter="sides"><i class="fas fa-bread-slice"></i>Sides</button>
+            <button class="menu-filter-btn" data-filter="drinks"><i class="fas fa-glass-cheers"></i>Drinks</button>
+        </div>
+
+        <div class="row g-4" id="menuGrid"></div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-brand"><i class="fas fa-fire"></i><span>Fuoco</span></div>
+                <p class="footer-desc">Authentic wood-fired pizza crafted with passion since 2009. From Naples to New York — every slice tells our story.</p>
+                <div class="footer-socials"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="footer-title">Quick Links</h5>
+                <ul class="footer-links">
+                    <li><a href="pizza.html"><i class="fas fa-chevron-right"></i>Home</a></li>
+                    <li><a href="aboutus.html"><i class="fas fa-chevron-right"></i>About</a></li>
+                    <li><a href="menu.html"><i class="fas fa-chevron-right"></i>Menu</a></li>
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i>Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5 class="footer-title">Hours</h5>
+                <ul class="footer-hours">
+                    <li><span>Mon - Fri</span><span>11AM - 11PM</span></li>
+                    <li><span>Saturday</span><span>10AM - 12AM</span></li>
+                    <li><span>Sunday</span><span>10AM - 10PM</span></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5 class="footer-title">Contact</h5>
+                <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><p>123 Pizza Ave, NY 10001</p></div>
+                <div class="footer-contact-item"><i class="fas fa-phone-alt"></i><p>+1 (555) 123-4567</p></div>
+                <div class="footer-contact-item"><i class="fas fa-envelope"></i><p>hello@fuocopizza.com</p></div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center"><p>&copy; 2024 Fuoco Pizza. All Rights Reserved. Made with <i class="fas fa-heart" style="color:var(--primary)"></i></p></div>
+    </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-chevron-up"></i></button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ===== DATA =====
+const menuItems=[
+    {id:1,name:"Margherita Classic",category:"classic",ingredients:"San Marzano tomatoes, fresh mozzarella, basil, extra virgin olive oil",price:14.99,rating:4.9,reviews:328,badge:"Bestseller",img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80"},
+    {id:2,name:"Pepperoni Supreme",category:"classic",ingredients:"Double pepperoni, mozzarella, oregano, tomato sauce",price:17.99,rating:4.8,reviews:412,badge:"#1 Seller",img:"https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=500&q=80"},
+    {id:3,name:"Quattro Formaggi",category:"premium",ingredients:"Mozzarella, gorgonzola, parmesan, ricotta, honey drizzle",price:20.99,rating:4.9,reviews:298,badge:"Popular",img:"https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=500&q=80"},
+    {id:4,name:"Truffle Mushroom",category:"premium",ingredients:"Black truffle, wild mushrooms, fontina, thyme, truffle oil",price:22.99,rating:4.8,reviews:215,badge:"Chef's Pick",img:"https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?auto=format&fit=crop&w=500&q=80"},
+    {id:5,name:"Diavola Inferno",category:"spicy",ingredients:"Spicy salami, jalapeños, chili flakes, mozzarella, tomato sauce",price:18.99,rating:4.7,reviews:189,badge:"🌶️ Spicy",img:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=80"},
+    {id:6,name:"Inferno BBQ",category:"spicy",ingredients:"BBQ chicken, ghost pepper sauce, red onion, cilantro",price:19.99,rating:4.5,reviews:97,badge:"🌶️ Extreme",img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80"},
+    {id:7,name:"Garden Veggie",category:"veggie",ingredients:"Bell peppers, artichokes, olives, sun-dried tomatoes, pesto",price:16.99,rating:4.6,reviews:156,badge:"Veggie",img:"https://images.unsplash.com/photo-1511689660979-10d2b1aada49?auto=format&fit=crop&w=500&q=80"},
+    {id:8,name:"Mediterranean Sun",category:"veggie",ingredients:"Feta, olives, roasted peppers, spinach, balsamic glaze",price:19.99,rating:4.7,reviews:143,badge:"Veggie",img:"https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=500&q=80"},
+    {id:9,name:"Prosciutto & Arugula",category:"premium",ingredients:"Prosciutto di Parma, fresh arugula, shaved parmesan, balsamic",price:21.99,rating:4.9,reviews:267,badge:"Premium",img:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=80"},
+    {id:10,name:"Hawaiian Twist",category:"classic",ingredients:"Smoked ham, caramelized pineapple, mozzarella, BBQ drizzle",price:16.99,rating:4.4,reviews:178,badge:"Classic",img:"https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?auto=format&fit=crop&w=500&q=80"},
+    {id:11,name:"Garlic Bread",category:"sides",ingredients:"Toasted artisan bread, roasted garlic butter, herbs, parmesan",price:7.99,rating:4.6,reviews:210,badge:"Side",img:"https://images.unsplash.com/photo-1619535860434-ba1d8fa12536?auto=format&fit=crop&w=500&q=80"},
+    {id:12,name:"Caesar Salad",category:"sides",ingredients:"Romaine, parmesan, croutons, anchovy dressing",price:9.99,rating:4.5,reviews:145,badge:"Side",img:"https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=500&q=80"},
+    {id:13,name:"Mozzarella Sticks",category:"sides",ingredients:"Crispy breaded mozzarella, marinara dipping sauce",price:8.99,rating:4.7,reviews:198,badge:"Side",img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?auto=format&fit=crop&w=500&q=80"},
+    {id:14,name:"Italian Soda",category:"drinks",ingredients:"Sparkling water, artisan fruit syrup, fresh citrus",price:4.99,rating:4.3,reviews:89,badge:"Drink",img:"https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&w=500&q=80"},
+    {id:15,name:"Craft Lemonade",category:"drinks",ingredients:"Fresh-squeezed lemons, mint, elderflower, sparkling",price:5.99,rating:4.6,reviews:112,badge:"Drink",img:"https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=500&q=80"},
+    {id:16,name:"Espresso",category:"drinks",ingredients:"Double-shot Italian espresso, perfectly extracted",price:3.99,rating:4.8,reviews:256,badge:"Drink",img:"https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?auto=format&fit=crop&w=500&q=80"}
+];
+
+let cart=[];
+
+// ===== RENDER MENU =====
+function renderMenu(filter='all'){
+    const grid=document.getElementById('menuGrid');
+    const filtered=filter==='all'?menuItems:menuItems.filter(p=>p.category===filter);
+    grid.innerHTML=filtered.map(p=>`
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="pizza-card">
+                <div class="pizza-card-img">
+                    <img src="${p.img}" alt="${p.name}" loading="lazy">
+                    <span class="pizza-card-badge">${p.badge}</span>
+                    <button class="pizza-card-wishlist" onclick="toggleWishlist(this)"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pizza-card-body">
+                    <div class="pizza-card-rating">${'<i class="fas fa-star"></i>'.repeat(Math.floor(p.rating))}${p.rating%1>=.5?'<i class="fas fa-star-half-alt"></i>':''}<span>${p.rating} (${p.reviews})</span></div>
+                    <h4 class="pizza-card-name">${p.name}</h4>
+                    <p class="pizza-card-ingredients">${p.ingredients}</p>
+                    <div class="pizza-card-footer">
+                        <span class="pizza-card-price">$${p.price.toFixed(2)}</span>
+                        <button class="btn-add-cart" onclick="addToCart(${p.id})" title="Add to cart"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===== CART =====
+function addToCart(id){
+    const item=menuItems.find(p=>p.id===id);
+    const existing=cart.find(i=>i.id===id);
+    if(existing)existing.qty+=1;else cart.push({...item,qty:1});
+    updateCart();
+    showToast(`${item.name} added to cart!`);
+}
+function removeFromCart(id){cart=cart.filter(i=>i.id!==id);updateCart()}
+function changeQty(id,delta){
+    const item=cart.find(i=>i.id===id);
+    if(!item)return;
+    item.qty+=delta;
+    if(item.qty<=0){removeFromCart(id);return}
+    updateCart();
+}
+function updateCart(){
+    const body=document.getElementById('cartBody'),badge=document.getElementById('cartBadge'),totalEl=document.getElementById('cartTotal');
+    const totalQty=cart.reduce((s,i)=>s+i.qty,0),totalPrice=cart.reduce((s,i)=>s+i.price*i.qty,0);
+    badge.textContent=totalQty;badge.style.display=totalQty>0?'flex':'none';totalEl.textContent=`$${totalPrice.toFixed(2)}`;
+    if(!cart.length)body.innerHTML='<div class="cart-empty"><i class="fas fa-pizza-slice"></i><p>Your cart is empty</p></div>';
+    else body.innerHTML=cart.map(i=>`<div class="cart-item"><img src="${i.img}" class="cart-item-img" alt="${i.name}"><div class="cart-item-info"><h6>${i.name}</h6><span>$${(i.price*i.qty).toFixed(2)}</span><div class="cart-item-qty"><button onclick="changeQty(${i.id},-1)"><i class="fas fa-minus"></i></button><span>${i.qty}</span><button onclick="changeQty(${i.id},1)"><i class="fas fa-plus"></i></button></div></div><button class="cart-item-remove" onclick="removeFromCart(${i.id})"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+}
+function toggleCart(){document.getElementById('cartSidebar').classList.toggle('active');document.getElementById('cartOverlay').classList.toggle('active')}
+function toggleWishlist(btn){btn.classList.toggle('liked');const i=btn.querySelector('i');if(btn.classList.contains('liked')){i.classList.remove('far');i.classList.add('fas');showToast('Added to wishlist!')}else{i.classList.remove('fas');i.classList.add('far');showToast('Removed from wishlist')}}
+
+// ===== MOBILE MENU =====
+function openMobileMenu(){document.getElementById('mobileMenu').classList.add('active');document.getElementById('mobileOverlay').classList.add('active');document.getElementById('burgerBtn').classList.add('active');document.body.style.overflow='hidden'}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('active');document.getElementById('mobileOverlay').classList.remove('active');document.getElementById('burgerBtn').classList.remove('active');document.body.style.overflow=''}
+document.getElementById('burgerBtn').addEventListener('click',openMobileMenu);
+document.getElementById('mobileMenuClose').addEventListener('click',closeMobileMenu);
+document.getElementById('mobileOverlay').addEventListener('click',closeMobileMenu);
+
+// ===== TOAST =====
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toast-message').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+// ===== PRELOADER =====
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('preloader').classList.add('hidden'),600)});
+
+// ===== NAVBAR SCROLL =====
+window.addEventListener('scroll',()=>{
+    document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>80);
+    document.getElementById('backToTop').classList.toggle('visible',window.scrollY>400);
+});
+
+// ===== FILTER =====
+document.querySelectorAll('.menu-filter-btn').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('.menu-filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');renderMenu(this.dataset.filter)})});
+
+// ===== CART CLOSE =====
+document.getElementById('cartClose').addEventListener('click',toggleCart);
+document.getElementById('cartOverlay').addEventListener('click',toggleCart);
+
+// ===== SCROLL REVEAL =====
+const revealObs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('active'),i*80);revealObs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>{if(!el.classList.contains('active'))revealObs.observe(el)});
+
+// ===== PARTICLES =====
+(function(){const c=document.getElementById('headerParticles');for(let i=0;i<15;i++){const p=document.createElement('div');p.classList.add('ph-particle');p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*6+'s';p.style.animationDuration=(4+Math.random()*4)+'s';const s=2+Math.random()*3;p.style.width=s+'px';p.style.height=s+'px';c.appendChild(p)}})();
+
+// ===== INIT =====
+renderMenu();
+</script>
+</body>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuoco Pizza — Artisan Wood-Fired Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Poppins:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e63946; --primary-dark: #c1121f; --orange: #f77f00; --orange-light: #fcbf49;
+            --dark: #0a0a0a; --dark-2: #111111; --dark-3: #1a1a1a; --dark-4: #222222; --dark-5: #2a2a2a;
+            --white: #ffffff; --gray: #b0b0b0; --gray-light: #d4d4d4;
+            --glass-bg: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.08);
+            --gradient-1: linear-gradient(135deg, #e63946, #f77f00);
+            --gradient-2: linear-gradient(135deg, #f77f00, #fcbf49);
+            --gradient-3: linear-gradient(135deg, #e63946, #c1121f);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; }
+        h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        /* ===== PRELOADER ===== */
+        #preloader { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--dark); z-index:99999; display:flex; align-items:center; justify-content:center; transition: opacity .6s ease, visibility .6s ease; }
+        #preloader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+        .loader-pizza { width:60px; height:60px; border:4px solid rgba(230,57,70,0.2); border-top-color:var(--primary); border-radius:50%; animation: spin .8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== NAVBAR — About Us Style ===== */
+        .navbar-custom { background:rgba(10,10,10,.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); padding:10px 0; z-index:1050; border-bottom:1px solid var(--glass-border); position:fixed; top:0; left:0; right:0; transition:all .4s; }
+        .navbar-custom.scrolled { box-shadow:0 4px 30px rgba(0,0,0,.5); }
+        .navbar-brand-custom { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 800; color: var(--white) !important; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .navbar-brand-custom i { color: var(--primary); font-size: 1.4rem; }
+        .navbar-brand-custom span { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .nav-link-custom { color: var(--gray-light) !important; font-weight: 500; font-size: .88rem; text-transform: uppercase; letter-spacing: 1px; padding: 8px 14px !important; position: relative; transition: color .3s ease; text-decoration:none; }
+        .nav-link-custom::after { content:''; position:absolute; bottom:0; left:50%; width:0; height:2px; background:var(--gradient-1); transition:all .3s ease; transform:translateX(-50%); }
+        .nav-link-custom:hover { color: var(--white) !important; }
+        .nav-link-custom:hover::after { width: 60%; }
+        .nav-link-custom.active { color: var(--white) !important; }
+        .nav-link-custom.active::after { width: 60%; }
+
+        .btn-order-nav { background: var(--gradient-1); color: var(--white) !important; border: none; padding: 10px 26px; border-radius: 50px; font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: 1px; position: relative; overflow: hidden; transition: all .3s ease; box-shadow: 0 0 20px rgba(230,57,70,.3); text-decoration: none; }
+        .btn-order-nav:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(230,57,70,.5); color: var(--white) !important; }
+        .btn-order-nav::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent); animation:shimmer 2s infinite; }
+        @keyframes shimmer { to { left:100%; } }
+
+        /* Burger Button */
+        .burger-btn { width:42px; height:42px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:12px; cursor:pointer; padding:10px; transition:all .3s; }
+        .burger-btn:hover { border-color:rgba(230,57,70,.3); }
+        .burger-line { width:22px; height:2px; background:var(--white); border-radius:2px; transition:all .3s ease; transform-origin:center; }
+        .burger-btn.active .burger-line:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .burger-btn.active .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .burger-btn.active .burger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.6); z-index:1040; opacity:0; visibility:hidden; transition:all .4s; backdrop-filter:blur(4px); }
+        .mobile-menu-overlay.active { opacity:1; visibility:visible; }
+
+        /* Mobile Menu */
+        .mobile-menu { position:fixed; top:0; right:-320px; width:300px; max-width:85vw; height:100vh; background:var(--dark-2); border-left:1px solid var(--glass-border); z-index:1055; transition:right .4s cubic-bezier(.16,1,.3,1); display:flex; flex-direction:column; }
+        .mobile-menu.active { right:0; }
+        .mobile-menu-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid var(--glass-border); }
+        .mobile-menu-close { width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:10px; color:var(--white); cursor:pointer; font-size:1.1rem; transition:all .3s; }
+        .mobile-menu-close:hover { background:var(--primary); border-color:var(--primary); }
+        .mobile-menu-body { flex:1; padding:24px; overflow-y:auto; }
+        .mobile-nav-link { display:flex; align-items:center; gap:14px; padding:14px 16px; color:var(--gray-light); text-decoration:none; font-weight:500; font-size:.95rem; text-transform:uppercase; letter-spacing:1px; border-radius:12px; transition:all .3s; margin-bottom:4px; }
+        .mobile-nav-link:hover, .mobile-nav-link.active { color:var(--white); background:rgba(230,57,70,.1); }
+        .mobile-nav-link i { width:20px; text-align:center; color:var(--primary); font-size:.9rem; }
+        .mobile-menu-footer { padding:20px 24px; border-top:1px solid var(--glass-border); }
+
+        /* ===== HERO ===== */
+        .hero-section { min-height:100vh; position:relative; display:flex; align-items:center; overflow:hidden; }
+        .hero-bg { position:absolute; top:0; left:0; width:100%; height:100%; background:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; }
+        .hero-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg,rgba(10,10,10,.93) 0%,rgba(10,10,10,.7) 50%,rgba(10,10,10,.88) 100%); }
+        .hero-particles { position:absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; pointer-events:none; }
+        .particle { position:absolute; width:4px; height:4px; background:var(--orange); border-radius:50%; opacity:0; animation:float-particle 6s infinite; }
+        @keyframes float-particle { 0%{opacity:0;transform:translateY(100vh) scale(0)} 10%{opacity:.8} 90%{opacity:.8} 100%{opacity:0;transform:translateY(-10vh) scale(1)} }
+        .hero-content { position:relative; z-index:2; }
+        .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(230,57,70,.15); border:1px solid rgba(230,57,70,.3); padding:8px 20px; border-radius:50px; font-size:.85rem; font-weight:500; color:var(--orange-light); margin-bottom:24px; animation:fadeInUp .8s ease forwards; }
+        .hero-badge i { animation:pulse-icon 1.5s infinite; }
+        @keyframes pulse-icon { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+        .hero-title { font-size:clamp(2.6rem,7vw,5.5rem); font-weight:900; line-height:1.05; margin-bottom:12px; animation:fadeInUp .8s ease .2s both; }
+        .hero-title .highlight { background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .hero-subtitle { font-size:clamp(.95rem,2.2vw,1.25rem); color:var(--gray); max-width:520px; line-height:1.7; margin-bottom:36px; animation:fadeInUp .8s ease .4s both; }
+        .hero-btns { animation:fadeInUp .8s ease .6s both; }
+        .btn-hero-primary { background:var(--gradient-1); color:var(--white); border:none; padding:14px 36px; border-radius:50px; font-weight:700; font-size:.95rem; text-transform:uppercase; letter-spacing:1px; position:relative; overflow:hidden; transition:all .4s; box-shadow:0 8px 30px rgba(230,57,70,.4); text-decoration:none; display:inline-flex; align-items:center; }
+        .btn-hero-primary:hover { transform:translateY(-3px); box-shadow:0 12px 40px rgba(230,57,70,.6); color:var(--white); }
+        .btn-hero-primary::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent); animation:shimmer 2.5s infinite; }
+        .btn-hero-secondary { background:transparent; color:var(--white); border:2px solid rgba(255,255,255,.3); padding:12px 34px; border-radius:50px; font-weight:600; font-size:.95rem; text-transform:uppercase; letter-spacing:1px; transition:all .4s; text-decoration:none; display:inline-flex; align-items:center; }
+        .btn-hero-secondary:hover { border-color:var(--orange); color:var(--orange); background:rgba(247,127,0,.1); transform:translateY(-3px); }
+        .hero-stats { display:flex; gap:36px; margin-top:50px; animation:fadeInUp .8s ease .8s both; flex-wrap:wrap; }
+        .hero-stat h3 { font-size:2.2rem; font-weight:800; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .hero-stat p { color:var(--gray); font-size:.82rem; text-transform:uppercase; letter-spacing:1px; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+        .hero-image-float { position:relative; animation:float 4s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(2deg)} }
+        .hero-img-wrapper { position:relative; width:100%; max-width:480px; margin:0 auto; }
+        .hero-img-wrapper img { width:100%; border-radius:30px; box-shadow:0 30px 80px rgba(230,57,70,.3); }
+        .hero-img-glow { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:80%; height:80%; background:radial-gradient(circle,rgba(230,57,70,.3),transparent 70%); filter:blur(60px); z-index:-1; }
+        .price-tag { position:absolute; top:20px; right:-10px; background:var(--gradient-1); padding:12px 20px; border-radius:15px; font-weight:800; font-size:1.3rem; box-shadow:0 10px 30px rgba(230,57,70,.4); animation:bounce-tag 2s ease-in-out infinite; }
+        @keyframes bounce-tag { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+        /* ===== SECTIONS ===== */
+        .section-padding { padding:80px 0; }
+        .section-header { margin-bottom:50px; text-align:center; }
+        .section-label { display:inline-flex; align-items:center; gap:8px; font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:3px; color:var(--orange); margin-bottom:14px; }
+        .section-label::before,.section-label::after { content:''; width:30px; height:1px; background:var(--orange); }
+        .section-title { font-size:clamp(1.9rem,4vw,3rem); font-weight:800; margin-bottom:14px; }
+        .section-title .highlight { background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .section-desc { color:var(--gray); max-width:580px; margin:0 auto; font-size:1rem; line-height:1.7; }
+
+        /* ===== CARDS ===== */
+        .pizza-card { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px; overflow:hidden; transition:all .4s ease; height:100%; }
+        .pizza-card:hover { transform:translateY(-10px); border-color:rgba(230,57,70,.3); box-shadow:0 25px 60px rgba(230,57,70,.15); }
+        .pizza-card-img { position:relative; overflow:hidden; height:210px; }
+        .pizza-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+        .pizza-card:hover .pizza-card-img img { transform:scale(1.1); }
+        .pizza-card-badge { position:absolute; top:12px; left:12px; background:var(--gradient-1); padding:5px 14px; border-radius:50px; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+        .pizza-card-wishlist { position:absolute; top:12px; right:12px; width:34px; height:34px; background:rgba(0,0,0,.5); border:none; border-radius:50%; color:var(--white); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .3s; backdrop-filter:blur(10px); font-size:.85rem; }
+        .pizza-card-wishlist:hover { background:var(--primary); }
+        .pizza-card-body { padding:20px; }
+        .pizza-card-rating { display:flex; align-items:center; gap:3px; margin-bottom:8px; }
+        .pizza-card-rating i { color:var(--orange-light); font-size:.75rem; }
+        .pizza-card-rating span { color:var(--gray); font-size:.78rem; margin-left:4px; }
+        .pizza-card-name { font-size:1.15rem; font-weight:700; margin-bottom:6px; }
+        .pizza-card-ingredients { color:var(--gray); font-size:.82rem; line-height:1.5; margin-bottom:16px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .pizza-card-footer { display:flex; align-items:center; justify-content:space-between; }
+        .pizza-card-price { font-size:1.35rem; font-weight:800; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .btn-add-cart { background:var(--gradient-1); border:none; width:40px; height:40px; border-radius:10px; color:var(--white); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .3s; font-size:.95rem; }
+        .btn-add-cart:hover { transform:scale(1.1); box-shadow:0 5px 20px rgba(230,57,70,.4); }
+
+        /* ===== MENU FILTER ===== */
+        .menu-filter-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:36px; }
+        .menu-filter-btn { background:var(--glass-bg); border:1px solid var(--glass-border); color:var(--gray); padding:9px 22px; border-radius:50px; font-weight:500; font-size:.85rem; cursor:pointer; transition:all .3s; }
+        .menu-filter-btn:hover,.menu-filter-btn.active { background:var(--gradient-1); border-color:transparent; color:var(--white); box-shadow:0 5px 20px rgba(230,57,70,.3); }
+
+        /* ===== ABOUT ===== */
+        .about-section { background:var(--dark-2); }
+        .about-img-wrapper { position:relative; border-radius:20px; overflow:hidden; }
+        .about-img-wrapper img { width:100%; height:480px; object-fit:cover; border-radius:20px; transition:transform .6s; }
+        .about-img-wrapper:hover img { transform:scale(1.05); }
+        .about-experience { position:absolute; bottom:24px; left:-16px; background:var(--gradient-1); padding:18px 28px; border-radius:15px; text-align:center; box-shadow:0 15px 40px rgba(230,57,70,.4); }
+        .about-experience h3 { font-size:2.2rem; font-weight:900; }
+        .about-experience p { font-size:.82rem; text-transform:uppercase; letter-spacing:1px; margin:0; }
+        .about-features { display:flex; flex-direction:column; gap:14px; margin-top:24px; }
+        .about-feature { display:flex; align-items:flex-start; gap:14px; padding:14px; border-radius:12px; background:var(--glass-bg); border:1px solid var(--glass-border); transition:all .3s; }
+        .about-feature:hover { border-color:rgba(230,57,70,.3); background:rgba(230,57,70,.05); }
+        .about-feature-icon { width:46px; height:46px; display:flex; align-items:center; justify-content:center; background:var(--gradient-1); border-radius:12px; font-size:1.1rem; flex-shrink:0; }
+        .about-feature h5 { font-size:.95rem; font-weight:600; margin-bottom:3px; }
+        .about-feature p { font-size:.82rem; color:var(--gray); margin:0; }
+
+        /* ===== OFFERS ===== */
+        .offers-section { background:var(--dark-2); }
+        .offer-banner { position:relative; border-radius:24px; overflow:hidden; background:var(--gradient-1); padding:50px; min-height:320px; display:flex; align-items:center; }
+        .offer-banner::before { content:''; position:absolute; top:-50%; right:-20%; width:500px; height:500px; background:radial-gradient(circle,rgba(255,255,255,.1),transparent 60%); border-radius:50%; }
+        .offer-content { position:relative; z-index:2; }
+        .offer-discount { font-size:4rem; font-weight:900; line-height:1; text-shadow:0 4px 30px rgba(0,0,0,.3); }
+        .offer-discount span { font-size:1.8rem; }
+        .offer-title { font-size:1.8rem; font-weight:800; margin:14px 0; }
+        .offer-desc { font-size:1rem; opacity:.9; margin-bottom:20px; }
+        .offer-code { display:inline-flex; align-items:center; gap:10px; background:rgba(0,0,0,.2); padding:10px 22px; border-radius:12px; font-weight:700; letter-spacing:2px; border:2px dashed rgba(255,255,255,.4); }
+        .offer-code i { color:var(--orange-light); }
+        .offer-img-container { position:relative; z-index:2; text-align:center; }
+        .offer-img-container img { max-width:300px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,.3); animation:float 4s ease-in-out infinite; }
+
+        .offer-card-small { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px; padding:26px; transition:all .4s; height:100%; }
+        .offer-card-small:hover { border-color:rgba(247,127,0,.3); transform:translateY(-5px); box-shadow:0 15px 40px rgba(247,127,0,.1); }
+        .offer-card-icon { width:54px; height:54px; display:flex; align-items:center; justify-content:center; background:rgba(247,127,0,.1); border-radius:14px; font-size:1.3rem; color:var(--orange); margin-bottom:16px; }
+        .offer-card-small h4 { font-size:1.1rem; font-weight:700; margin-bottom:8px; }
+        .offer-card-small p { color:var(--gray); font-size:.85rem; margin-bottom:14px; }
+        .offer-card-link { color:var(--orange); text-decoration:none; font-weight:600; font-size:.88rem; display:inline-flex; align-items:center; gap:6px; transition:gap .3s; }
+        .offer-card-link:hover { gap:12px; color:var(--orange-light); }
+
+        /* ===== DELIVERY ===== */
+        .delivery-banner { background:var(--dark); padding:70px 0; position:relative; overflow:hidden; }
+        .delivery-content { position:relative; z-index:2; text-align:center; }
+        .delivery-icon { width:70px; height:70px; display:inline-flex; align-items:center; justify-content:center; background:var(--gradient-1); border-radius:50%; font-size:1.8rem; margin-bottom:20px; box-shadow:0 10px 40px rgba(230,57,70,.4); animation:pulse-delivery 2s ease-in-out infinite; }
+        @keyframes pulse-delivery { 0%,100%{box-shadow:0 10px 40px rgba(230,57,70,.4)} 50%{box-shadow:0 10px 60px rgba(230,57,70,.7)} }
+        .delivery-steps { display:flex; justify-content:center; gap:36px; margin-top:36px; flex-wrap:wrap; }
+        .delivery-step { text-align:center; max-width:180px; }
+        .delivery-step-icon { width:56px; height:56px; display:inline-flex; align-items:center; justify-content:center; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:50%; font-size:1.2rem; color:var(--orange); margin-bottom:10px; transition:all .3s; }
+        .delivery-step:hover .delivery-step-icon { background:var(--gradient-1); color:var(--white); border-color:transparent; }
+
+        /* ===== GALLERY ===== */
+        .gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(2,240px); gap:14px; }
+        .gallery-item { position:relative; border-radius:16px; overflow:hidden; cursor:pointer; }
+        .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 2; }
+        .gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform .6s; }
+        .gallery-item:hover img { transform:scale(1.1); }
+        .gallery-item-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(180deg,transparent 40%,rgba(230,57,70,.8) 100%); opacity:0; transition:opacity .4s; display:flex; align-items:flex-end; padding:20px; }
+        .gallery-item:hover .gallery-item-overlay { opacity:1; }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonial-card { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px; padding:28px; height:100%; transition:all .4s; }
+        .testimonial-card:hover { border-color:rgba(230,57,70,.3); transform:translateY(-5px); box-shadow:0 15px 40px rgba(230,57,70,.1); }
+        .testimonial-card .quote-icon { font-size:2.2rem; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:12px; }
+        .testimonial-text { color:var(--gray-light); font-size:.92rem; line-height:1.8; margin-bottom:20px; font-style:italic; }
+        .testimonial-author { display:flex; align-items:center; gap:12px; }
+        .testimonial-avatar { width:46px; height:46px; border-radius:50%; object-fit:cover; border:2px solid var(--primary); }
+        .testimonial-stars { color:var(--orange-light); font-size:.72rem; }
+
+        /* ===== CHEFS ===== */
+        .chef-card { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px; overflow:hidden; text-align:center; transition:all .4s; }
+        .chef-card:hover { transform:translateY(-8px); border-color:rgba(230,57,70,.3); box-shadow:0 20px 50px rgba(230,57,70,.15); }
+        .chef-card-img { height:280px; overflow:hidden; }
+        .chef-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .6s; filter:grayscale(40%); }
+        .chef-card:hover .chef-card-img img { transform:scale(1.05); filter:grayscale(0%); }
+        .chef-card-body { padding:20px; }
+        .chef-card-body h5 { font-size:1.1rem; font-weight:700; }
+        .chef-card-body p { color:var(--orange); font-size:.82rem; font-weight:500; }
+        .chef-socials { display:flex; justify-content:center; gap:10px; margin-top:10px; }
+        .chef-socials a { width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:50%; color:var(--gray); text-decoration:none; transition:all .3s; font-size:.82rem; }
+        .chef-socials a:hover { background:var(--gradient-1); color:var(--white); border-color:transparent; }
+
+        /* ===== RESERVATION ===== */
+        .reservation-form { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:24px; padding:36px; }
+        .form-control-custom { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px; color:var(--white); padding:13px 16px; font-size:.92rem; width:100%; transition:all .3s; }
+        .form-control-custom:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(230,57,70,.15); background:rgba(255,255,255,.08); }
+        .form-control-custom::placeholder { color:var(--gray); }
+        .form-label-custom { font-size:.82rem; font-weight:500; color:var(--gray-light); margin-bottom:6px; display:block; }
+        select.form-control-custom { appearance:none; cursor:pointer; }
+        .btn-reserve { background:var(--gradient-1); border:none; padding:14px 40px; border-radius:50px; color:var(--white); font-weight:700; font-size:.95rem; text-transform:uppercase; letter-spacing:1px; width:100%; transition:all .4s; position:relative; overflow:hidden; cursor:pointer; }
+        .btn-reserve:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(230,57,70,.4); }
+        .btn-reserve::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent); animation:shimmer 2.5s infinite; }
+        .reservation-info-card { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:16px; padding:22px; margin-bottom:14px; display:flex; align-items:flex-start; gap:14px; transition:all .3s; }
+        .reservation-info-card:hover { border-color:rgba(230,57,70,.3); background:rgba(230,57,70,.05); }
+        .reservation-info-icon { width:46px; height:46px; display:flex; align-items:center; justify-content:center; background:rgba(230,57,70,.1); border-radius:12px; color:var(--primary); font-size:1.1rem; flex-shrink:0; }
+
+        /* ===== CONTACT ===== */
+        .contact-card { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px; padding:30px; text-align:center; transition:all .4s; height:100%; }
+        .contact-card:hover { border-color:rgba(230,57,70,.3); transform:translateY(-5px); }
+        .contact-card-icon { width:64px; height:64px; display:inline-flex; align-items:center; justify-content:center; background:rgba(230,57,70,.1); border-radius:50%; font-size:1.4rem; color:var(--primary); margin-bottom:16px; transition:all .3s; }
+        .contact-card:hover .contact-card-icon { background:var(--gradient-1); color:var(--white); }
+
+        /* ===== FAQ ===== */
+        .accordion-custom .accordion-item { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:16px !important; margin-bottom:10px; overflow:hidden; }
+        .accordion-custom .accordion-button { background:transparent; color:var(--white); font-weight:600; font-size:.95rem; padding:18px 22px; box-shadow:none; }
+        .accordion-custom .accordion-button::after { background-image:none; content:'\f078'; font-family:'Font Awesome 6 Free'; font-weight:900; font-size:.78rem; color:var(--orange); transition:transform .3s; }
+        .accordion-custom .accordion-button:not(.collapsed)::after { transform:rotate(180deg); }
+        .accordion-custom .accordion-button:not(.collapsed) { background:rgba(230,57,70,.05); color:var(--orange); }
+        .accordion-custom .accordion-body { color:var(--gray); font-size:.88rem; line-height:1.8; padding:0 22px 18px; }
+
+        /* ===== NEWSLETTER ===== */
+        .newsletter-section { background:var(--gradient-1); padding:60px 0; position:relative; overflow:hidden; }
+        .newsletter-content { position:relative; z-index:2; }
+        .newsletter-form { display:flex; gap:12px; max-width:480px; margin:0 auto; }
+        .newsletter-input { flex:1; background:rgba(0,0,0,.2); border:2px solid rgba(255,255,255,.2); border-radius:50px; padding:13px 22px; color:var(--white); font-size:.92rem; transition:all .3s; }
+        .newsletter-input:focus { outline:none; border-color:rgba(255,255,255,.5); background:rgba(0,0,0,.3); }
+        .newsletter-input::placeholder { color:rgba(255,255,255,.5); }
+        .btn-newsletter { background:var(--white); color:var(--primary); border:none; padding:13px 28px; border-radius:50px; font-weight:700; font-size:.88rem; text-transform:uppercase; letter-spacing:1px; transition:all .3s; white-space:nowrap; cursor:pointer; }
+        .btn-newsletter:hover { background:var(--dark); color:var(--white); transform:translateY(-2px); }
+
+        /* ===== FOOTER ===== */
+        .footer { background:var(--dark); padding-top:60px; border-top:1px solid var(--glass-border); }
+        .footer-brand { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:800; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+        .footer-brand i { color:var(--primary); }
+        .footer-brand span { background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .footer-desc { color:var(--gray); font-size:.88rem; line-height:1.7; margin-bottom:20px; }
+        .footer-socials { display:flex; gap:10px; }
+        .footer-socials a { width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:50%; color:var(--gray); text-decoration:none; transition:all .3s; font-size:.92rem; }
+        .footer-socials a:hover { background:var(--gradient-1); color:var(--white); border-color:transparent; transform:translateY(-3px); }
+        .footer-title { font-size:1.05rem; font-weight:700; margin-bottom:20px; position:relative; padding-bottom:10px; }
+        .footer-title::after { content:''; position:absolute; bottom:0; left:0; width:36px; height:3px; background:var(--gradient-1); border-radius:2px; }
+        .footer-links { list-style:none; padding:0; margin:0; }
+        .footer-links li { margin-bottom:8px; }
+        .footer-links a { color:var(--gray); text-decoration:none; font-size:.88rem; transition:all .3s; display:inline-flex; align-items:center; gap:8px; }
+        .footer-links a:hover { color:var(--orange); padding-left:5px; }
+        .footer-links a i { font-size:.6rem; color:var(--primary); }
+        .footer-hours { list-style:none; padding:0; margin:0; }
+        .footer-hours li { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--glass-border); font-size:.88rem; }
+        .footer-hours li span:first-child { color:var(--gray); }
+        .footer-hours li span:last-child { color:var(--white); font-weight:500; }
+        .footer-contact-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; }
+        .footer-contact-item i { color:var(--primary); margin-top:3px; }
+        .footer-contact-item p { color:var(--gray); font-size:.88rem; margin:0; }
+        .footer-bottom { border-top:1px solid var(--glass-border); padding:20px 0; margin-top:50px; }
+        .footer-bottom p { color:var(--gray); font-size:.82rem; margin:0; }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top { position:fixed; bottom:24px; right:24px; width:46px; height:46px; background:var(--gradient-1); border:none; border-radius:50%; color:var(--white); display:flex; align-items:center; justify-content:center; font-size:1.1rem; cursor:pointer; opacity:0; visibility:hidden; transition:all .4s; z-index:999; box-shadow:0 5px 20px rgba(230,57,70,.4); }
+        .back-to-top.visible { opacity:1; visibility:visible; }
+        .back-to-top:hover { transform:translateY(-5px); box-shadow:0 10px 30px rgba(230,57,70,.6); }
+
+        /* ===== CART SIDEBAR ===== */
+        .cart-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.6); z-index:9998; opacity:0; visibility:hidden; transition:all .3s; }
+        .cart-overlay.active { opacity:1; visibility:visible; }
+        .cart-sidebar { position:fixed; top:0; right:-400px; width:370px; max-width:90vw; height:100vh; background:var(--dark-2); border-left:1px solid var(--glass-border); z-index:9999; transition:right .4s cubic-bezier(.16,1,.3,1); display:flex; flex-direction:column; }
+        .cart-sidebar.active { right:0; }
+        .cart-header { display:flex; justify-content:space-between; align-items:center; padding:22px; border-bottom:1px solid var(--glass-border); }
+        .cart-header h5 { margin:0; font-weight:700; font-size:1rem; }
+        .cart-close { background:none; border:none; color:var(--gray); font-size:1.1rem; cursor:pointer; transition:color .3s; }
+        .cart-close:hover { color:var(--primary); }
+        .cart-body { flex:1; overflow-y:auto; padding:22px; }
+        .cart-item { display:flex; gap:12px; padding:12px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:12px; margin-bottom:10px; }
+        .cart-item-img { width:56px; height:56px; border-radius:10px; object-fit:cover; }
+        .cart-item-info { flex:1; }
+        .cart-item-info h6 { font-size:.85rem; font-weight:600; margin-bottom:3px; }
+        .cart-item-info span { color:var(--orange); font-weight:700; font-size:.82rem; }
+        .cart-item-remove { background:none; border:none; color:var(--gray); cursor:pointer; font-size:.78rem; transition:color .3s; }
+        .cart-item-remove:hover { color:var(--primary); }
+        .cart-empty { text-align:center; padding:40px 0; color:var(--gray); }
+        .cart-empty i { font-size:2.5rem; margin-bottom:14px; display:block; color:var(--dark-5); }
+        .cart-footer { padding:22px; border-top:1px solid var(--glass-border); }
+        .cart-total { display:flex; justify-content:space-between; margin-bottom:14px; }
+        .cart-total span { font-weight:700; font-size:1.05rem; }
+        .btn-checkout { background:var(--gradient-1); border:none; padding:13px; border-radius:12px; color:var(--white); font-weight:700; text-transform:uppercase; letter-spacing:1px; width:100%; transition:all .3s; cursor:pointer; font-size:.9rem; }
+        .btn-checkout:hover { box-shadow:0 8px 25px rgba(230,57,70,.4); transform:translateY(-2px); }
+
+        /* ===== TOAST ===== */
+        .toast-notification { position:fixed; top:100px; right:24px; background:var(--dark-3); border:1px solid var(--glass-border); border-left:4px solid var(--primary); padding:14px 22px; border-radius:12px; z-index:10000; display:flex; align-items:center; gap:10px; transform:translateX(150%); transition:transform .4s ease; box-shadow:0 10px 30px rgba(0,0,0,.3); }
+        .toast-notification.show { transform:translateX(0); }
+        .toast-notification i { color:var(--primary); font-size:1.1rem; }
+        .toast-notification span { font-size:.88rem; font-weight:500; }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal { opacity:0; transform:translateY(40px); transition:opacity .8s ease,transform .8s ease; }
+        .reveal.active { opacity:1; transform:translateY(0); }
+        .reveal-left { opacity:0; transform:translateX(-50px); transition:opacity .8s ease,transform .8s ease; }
+        .reveal-left.active { opacity:1; transform:translateX(0); }
+        .reveal-right { opacity:0; transform:translateX(50px); transition:opacity .8s ease,transform .8s ease; }
+        .reveal-right.active { opacity:1; transform:translateX(0); }
+
+        /* ===== COUNTER ===== */
+        .counter-section { background:var(--dark-2); padding:50px 0; }
+        .counter-icon { width:54px; height:54px; display:inline-flex; align-items:center; justify-content:center; background:rgba(230,57,70,.1); border-radius:50%; font-size:1.3rem; color:var(--primary); margin-bottom:12px; }
+        .counter-number { font-size:2.5rem; font-weight:900; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .counter-label { color:var(--gray); font-size:.82rem; text-transform:uppercase; letter-spacing:1px; }
+
+        .cart-badge { position:absolute; top:-5px; right:-5px; background:var(--primary); width:18px; height:18px; border-radius:50%; font-size:.6rem; display:flex; align-items:center; justify-content:center; font-weight:700; }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:1199px) {
+            .hero-title { font-size:clamp(2.4rem,6vw,4.5rem); }
+        }
+        @media(max-width:991px) {
+            .section-padding { padding:60px 0; }
+            .hero-stats { gap:24px; }
+            .hero-stat h3 { font-size:1.8rem; }
+            .about-img-wrapper img { height:380px; }
+            .offer-banner { padding:36px 28px; }
+            .gallery-grid { grid-template-columns:repeat(2,1fr); grid-template-rows:repeat(3,200px); }
+            .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 1; }
+            .reservation-form { padding:28px; }
+            .chef-card-img { height:240px; }
+        }
+        @media(max-width:767px) {
+            .section-padding { padding:50px 0; }
+            .hero-section { min-height:auto; padding-top:120px; padding-bottom:60px; }
+            .hero-stats { flex-direction:row; gap:20px; justify-content:flex-start; }
+            .hero-stat h3 { font-size:1.6rem; }
+            .hero-stat p { font-size:.72rem; }
+            .newsletter-form { flex-direction:column; }
+            .gallery-grid { grid-template-columns:1fr 1fr; grid-template-rows:repeat(3,180px); }
+            .gallery-item:nth-child(1) { grid-column:span 2; }
+            .offer-discount { font-size:3rem; }
+            .offer-title { font-size:1.4rem; }
+            .delivery-steps { gap:20px; }
+            .reservation-form { padding:22px; }
+            .about-img-wrapper img { height:300px; }
+            .counter-number { font-size:2rem; }
+            .pizza-card-img { height:180px; }
+        }
+        @media(max-width:575px) {
+            .hero-title { font-size:2.2rem; }
+            .btn-hero-primary,.btn-hero-secondary { padding:12px 24px; font-size:.85rem; }
+            .gallery-grid { grid-template-columns:1fr; grid-template-rows:auto; }
+            .gallery-item { height:200px; }
+            .gallery-item:nth-child(1) { grid-column:span 1; }
+        }
+
+        .glow-btn { position:relative; }
+        .glow-btn::after { content:''; position:absolute; top:50%; left:50%; width:0; height:0; background:rgba(230,57,70,.4); border-radius:50%; transform:translate(-50%,-50%); transition:width .6s,height .6s; z-index:-1; }
+        .glow-btn:hover::after { width:200%; height:200%; }
+    </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader"><div class="loader-pizza"></div></div>
+
+<!-- Toast -->
+<div class="toast-notification" id="toast"><i class="fas fa-check-circle"></i><span id="toast-message">Item added!</span></div>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay"></div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h5><i class="fas fa-shopping-bag me-2" style="color:var(--primary)"></i>Your Order</h5>
+        <button class="cart-close" id="cartClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-body" id="cartBody">
+        <div class="cart-empty"><i class="fas fa-pizza-slice"></i><p>Your cart is empty</p></div>
+    </div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total:</span><span id="cartTotal">$0.00</span></div>
+        <button class="btn-checkout" onclick="showToast('Checkout coming soon!')">Checkout</button>
+    </div>
+</div>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobileOverlay"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <a class="navbar-brand-custom" href="#home" style="font-size:1.5rem;" onclick="closeMobileMenu()"><i class="fas fa-fire"></i><span>Fuoco</span></a>
+        <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mobile-menu-body">
+        <a href="pizza.html" class="mobile-nav-link active" onclick="closeMobileMenu()"><i class="fas fa-home"></i>Home</a>
+        <a href="aboutus.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-info-circle"></i>About</a>
+        <a href="menu.html" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-utensils"></i>Menu</a>
+        <a href="#gallery" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-images"></i>Gallery</a>
+        <a href="#chefs" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-hat-chef"></i>Chefs</a>
+        <a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()"><i class="fas fa-phone"></i>Contact</a>
+    </div>
+    <div class="mobile-menu-footer">
+        <a href="#reservation" class="btn-order-nav w-100 text-center d-block" onclick="closeMobileMenu()" style="border-radius:14px;padding:14px;">Order Now</a>
+    </div>
+</div>
+
+<!-- Navbar — About Us Style -->
+<nav class="navbar-custom" id="mainNav">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+            <a class="navbar-brand-custom" href="pizza.html">
+                <i class="fas fa-fire"></i>
+                <span>Fuoco</span>
+            </a>
+            <div class="d-none d-lg-flex align-items-center gap-1">
+                <a href="pizza.html" class="nav-link-custom active">Home</a>
+                <a href="aboutus.html" class="nav-link-custom">About</a>
+                <a href="menu.html" class="nav-link-custom">Menu</a>
+                <a href="contact.html" class="nav-link-custom">Contact</a>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn p-0 position-relative" onclick="toggleCart()" style="color:var(--white);font-size:1.15rem;">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+                </button>
+                <a href="#reservation" class="btn-order-nav d-none d-md-inline-flex">Order Now</a>
+                <button class="burger-btn d-lg-none" id="burgerBtn" aria-label="Menu">
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero-section" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-particles" id="particles"></div>
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6 hero-content">
+                <div class="hero-badge"><i class="fas fa-fire"></i> Wood-Fired Perfection</div>
+                <h1 class="hero-title">Taste The<br><span class="highlight">Finest Pizza</span><br>In Town</h1>
+                <p class="hero-subtitle">Handcrafted with passion, baked in a traditional wood-fired oven. Experience authentic Italian flavors with every bite.</p>
+                <div class="hero-btns d-flex flex-wrap gap-3">
+                    <a href="#menu" class="btn-hero-primary glow-btn"><i class="fas fa-utensils me-2"></i>Explore Menu</a>
+                    <a href="#reservation" class="btn-hero-secondary"><i class="fas fa-calendar-alt me-2"></i>Reserve Table</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat"><h3>15+</h3><p>Years Experience</p></div>
+                    <div class="hero-stat"><h3>50K+</h3><p>Happy Customers</p></div>
+                    <div class="hero-stat"><h3>120+</h3><p>Pizza Varieties</p></div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hero-image-float">
+                    <div class="hero-img-wrapper">
+                        <div class="hero-img-glow"></div>
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Delicious Pizza">
+                        <div class="price-tag">From $12.99</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Counter -->
+<section class="counter-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-md-3 reveal"><div class="counter-item text-center p-3"><div class="counter-icon"><i class="fas fa-pizza-slice"></i></div><div class="counter-number" data-target="120">0</div><div class="counter-label">Pizza Varieties</div></div></div>
+            <div class="col-6 col-md-3 reveal"><div class="counter-item text-center p-3"><div class="counter-icon"><i class="fas fa-smile"></i></div><div class="counter-number" data-target="50000">0</div><div class="counter-label">Happy Customers</div></div></div>
+            <div class="col-6 col-md-3 reveal"><div class="counter-item text-center p-3"><div class="counter-icon"><i class="fas fa-award"></i></div><div class="counter-number" data-target="35">0</div><div class="counter-label">Awards Won</div></div></div>
+            <div class="col-6 col-md-3 reveal"><div class="counter-item text-center p-3"><div class="counter-icon"><i class="fas fa-user-tie"></i></div><div class="counter-number" data-target="25">0</div><div class="counter-label">Master Chefs</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="about-section section-padding" id="about">
+    <div class="container">
+        <div class="row align-items-center g-4 g-lg-5">
+            <div class="col-lg-6 reveal-left">
+                <div class="about-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=700&q=80" alt="Chef in Kitchen">
+                    <div class="about-experience"><h3>15+</h3><p>Years of<br>Excellence</p></div>
+                </div>
+            </div>
+            <div class="col-lg-6 reveal-right">
+                <div class="section-label">Our Story</div>
+                <h2 class="section-title">Crafting <span class="highlight">Perfect Pizzas</span> Since 2009</h2>
+                <p style="color:var(--gray);line-height:1.8;margin-bottom:8px;">At Fuoco, every pizza tells a story. Our master pizzaiolos bring decades of tradition from Naples, combining time-honored techniques with the finest locally sourced ingredients.</p>
+                <div class="about-features">
+                    <div class="about-feature"><div class="about-feature-icon"><i class="fas fa-fire"></i></div><div><h5>Wood-Fired Oven</h5><p>Traditional brick oven at 900°F for the perfect char</p></div></div>
+                    <div class="about-feature"><div class="about-feature-icon"><i class="fas fa-leaf"></i></div><div><h5>Fresh Ingredients</h5><p>Locally sourced, organic produce daily</p></div></div>
+                    <div class="about-feature"><div class="about-feature-icon"><i class="fas fa-clock"></i></div><div><h5>72-Hour Fermentation</h5><p>Slow-fermented dough for incredible flavor & texture</p></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu -->
+<section class="menu-section section-padding" id="menu">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">Our Menu</div>
+            <h2 class="section-title">Discover Our <span class="highlight">Popular Pizzas</span></h2>
+            <p class="section-desc">Each pizza is handcrafted with love, using premium ingredients and baked to perfection in our wood-fired oven</p>
+        </div>
+        <div class="menu-filter-btns reveal">
+            <button class="menu-filter-btn active" data-filter="all">All</button>
+            <button class="menu-filter-btn" data-filter="classic">Classic</button>
+            <button class="menu-filter-btn" data-filter="premium">Premium</button>
+            <button class="menu-filter-btn" data-filter="veggie">Veggie</button>
+            <button class="menu-filter-btn" data-filter="spicy">Spicy</button>
+        </div>
+        <div class="row g-4" id="menuGrid"></div>
+    </div>
+</section>
+
+<!-- Offers -->
+<section class="offers-section section-padding" id="offers">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">Special Deals</div>
+            <h2 class="section-title">Exclusive <span class="highlight">Offers</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-8 reveal-left">
+                <div class="offer-banner">
+                    <div class="row align-items-center w-100">
+                        <div class="col-md-7 offer-content">
+                            <div class="offer-discount">50<span>%</span> OFF</div>
+                            <h3 class="offer-title">Family Feast Friday</h3>
+                            <p class="offer-desc">Every Friday, get 50% off on all family-size pizzas!</p>
+                            <div class="offer-code"><i class="fas fa-gift"></i><span>FAMILY50</span></div>
+                        </div>
+                        <div class="col-md-5 d-none d-md-block offer-img-container">
+                            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80" alt="Family Pizza">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 reveal-right">
+                <div class="d-flex flex-column gap-4 h-100">
+                    <div class="offer-card-small"><div class="offer-card-icon"><i class="fas fa-truck"></i></div><h4>Free Delivery</h4><p>Free delivery on orders above $30!</p><a href="#menu" class="offer-card-link">Order Now <i class="fas fa-arrow-right"></i></a></div>
+                    <div class="offer-card-small"><div class="offer-card-icon"><i class="fas fa-percent"></i></div><h4>Lunch Combo</h4><p>Pizza + Drink + Dessert for just $14.99!</p><a href="#menu" class="offer-card-link">Learn More <i class="fas fa-arrow-right"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Delivery -->
+<section class="delivery-banner">
+    <div class="container">
+        <div class="delivery-content reveal">
+            <div class="delivery-icon"><i class="fas fa-motorcycle"></i></div>
+            <h2 style="font-size:clamp(1.6rem,4vw,2.5rem);font-weight:800;margin-bottom:10px;">Fast & <span style="background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Free Delivery</span></h2>
+            <p style="color:var(--gray);max-width:550px;margin:0 auto 30px;font-size:1rem;">Hot, fresh pizza delivered to your doorstep within 30 minutes!</p>
+            <div class="delivery-steps">
+                <div class="delivery-step"><div class="delivery-step-icon"><i class="fas fa-mobile-alt"></i></div><h5>Order</h5><p>Choose favorites</p></div>
+                <div class="delivery-step"><div class="delivery-step-icon"><i class="fas fa-fire"></i></div><h5>Prepare</h5><p>Fresh in oven</p></div>
+                <div class="delivery-step"><div class="delivery-step-icon"><i class="fas fa-shipping-fast"></i></div><h5>Deliver</h5><p>30 min guaranteed</p></div>
+                <div class="delivery-step"><div class="delivery-step-icon"><i class="fas fa-heart"></i></div><h5>Enjoy!</h5><p>Every bite bliss</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery -->
+<section class="gallery-section section-padding" id="gallery">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">Gallery</div>
+            <h2 class="section-title">Our Food <span class="highlight">Gallery</span></h2>
+        </div>
+        <div class="gallery-grid reveal">
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80" alt="Pizza"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=80" alt="Pizza"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?auto=format&fit=crop&w=500&q=80" alt="Pizza"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=500&q=80" alt="Pizza"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=500&q=80" alt="Pizza"><div class="gallery-item-overlay"><i class="fas fa-expand text-white"></i></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-section section-padding" id="testimonials">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">Testimonials</div>
+            <h2 class="section-title">What Our <span class="highlight">Customers Say</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="testimonial-card">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <div class="testimonial-stars mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testimonial-text">"The best pizza I've ever had! The wood-fired crust is absolute perfection. Worth every mile we drive."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" class="testimonial-avatar" alt="Sarah">
+                        <div><h6>Sarah Mitchell</h6><span>Regular Customer</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="testimonial-card">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <div class="testimonial-stars mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testimonial-text">"Fuoco is our family's go-to spot. The kids love the Margherita and I'm obsessed with the Truffle Mushroom!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" class="testimonial-avatar" alt="James">
+                        <div><h6>James Rodriguez</h6><span>Food Blogger</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="testimonial-card">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <div class="testimonial-stars mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                    <p class="testimonial-text">"Ordered delivery for a party — everyone was blown away. Pizzas arrived hot, fresh, and absolutely delicious!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" class="testimonial-avatar" alt="Emily">
+                        <div><h6>Emily Chen</h6><span>Event Planner</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Chefs -->
+<section class="chefs-section section-padding" id="chefs">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">Our Team</div>
+            <h2 class="section-title">Meet Our <span class="highlight">Master Chefs</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-lg-3 reveal">
+                <div class="chef-card">
+                    <div class="chef-card-img"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80" alt="Marco"></div>
+                    <div class="chef-card-body"><h5>Marco Rossi</h5><p>Head Pizzaiolo</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 reveal">
+                <div class="chef-card">
+                    <div class="chef-card-img"><img src="https://images.unsplash.com/photo-1583394293214-28ez1c9f7587?auto=format&fit=crop&w=400&q=80" alt="Lucia"></div>
+                    <div class="chef-card-body"><h5>Lucia Ferrara</h5><p>Pastry Chef</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 reveal">
+                <div class="chef-card">
+                    <div class="chef-card-img"><img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=400&q=80" alt="Antonio"></div>
+                    <div class="chef-card-body"><h5>Antonio Bianchi</h5><p>Sous Chef</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 reveal">
+                <div class="chef-card">
+                    <div class="chef-card-img"><img src="https://images.unsplash.com/photo-1556909114-44e3e70034e2?auto=format&fit=crop&w=400&q=80" alt="Sofia"></div>
+                    <div class="chef-card-body"><h5>Sofia Marino</h5><p>Sauce Specialist</p><div class="chef-socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Reservation -->
+<section class="reservation-section section-padding" id="reservation">
+    <div class="container">
+        <div class="row g-4 g-lg-5 align-items-start">
+            <div class="col-lg-5 reveal-left">
+                <div class="section-label" style="justify-content:flex-start;">Reservation</div>
+                <h2 class="section-title" style="text-align:left;">Book Your <span class="highlight">Table</span></h2>
+                <p style="color:var(--gray);line-height:1.8;margin-bottom:24px;">Reserve your table online and skip the wait.</p>
+                <div class="reservation-info-card"><div class="reservation-info-icon"><i class="fas fa-phone-alt"></i></div><div><h6 style="font-weight:600;margin-bottom:2px;">Call Us</h6><p style="color:var(--gray);margin:0;font-size:.85rem;">+1 (555) 123-4567</p></div></div>
+                <div class="reservation-info-card"><div class="reservation-info-icon"><i class="fas fa-envelope"></i></div><div><h6 style="font-weight:600;margin-bottom:2px;">Email Us</h6><p style="color:var(--gray);margin:0;font-size:.85rem;">reserve@fuocopizza.com</p></div></div>
+                <div class="reservation-info-card"><div class="reservation-info-icon"><i class="fas fa-clock"></i></div><div><h6 style="font-weight:600;margin-bottom:2px;">Hours</h6><p style="color:var(--gray);margin:0;font-size:.85rem;">Mon-Fri: 11AM-11PM<br>Sat-Sun: 10AM-12AM</p></div></div>
+            </div>
+            <div class="col-lg-7 reveal-right">
+                <div class="reservation-form">
+                    <form id="reservationForm" onsubmit="handleReservation(event)">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label-custom">Full Name</label><input type="text" class="form-control-custom" placeholder="John Doe" required></div>
+                            <div class="col-md-6 mb-3"><label class="form-label-custom">Email</label><input type="email" class="form-control-custom" placeholder="john@email.com" required></div>
+                            <div class="col-md-6 mb-3"><label class="form-label-custom">Phone</label><input type="tel" class="form-control-custom" placeholder="+1 (555) 000-0000" required></div>
+                            <div class="col-md-6 mb-3"><label class="form-label-custom">Guests</label><select class="form-control-custom" required><option value="" disabled selected>Select</option><option>1-2</option><option>3-4</option><option>5-6</option><option>7+</option></select></div>
+                            <div class="col-md-6 mb-3"><label class="form-label-custom">Date</label><input type="date" class="form-control-custom" required></div>
+                            <div class="col-md-6 mb-3"><label class="form-label-custom">Time</label><input type="time" class="form-control-custom" required></div>
+                            <div class="col-12 mb-3"><label class="form-label-custom">Special Requests</label><textarea class="form-control-custom" rows="3" placeholder="Any dietary requirements..."></textarea></div>
+                            <div class="col-12"><button type="submit" class="btn-reserve glow-btn"><i class="fas fa-calendar-check me-2"></i>Reserve Now</button></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="contact-section section-padding" id="contact">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">Get In Touch</div>
+            <h2 class="section-title">Contact <span class="highlight">Information</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-lg-3 reveal"><div class="contact-card"><div class="contact-card-icon"><i class="fas fa-map-marker-alt"></i></div><h5>Location</h5><p style="color:var(--gray);font-size:.85rem;">123 Pizza Ave, NY</p></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="contact-card"><div class="contact-card-icon"><i class="fas fa-phone-alt"></i></div><h5>Phone</h5><p style="color:var(--gray);font-size:.85rem;">+1 (555) 123-4567</p></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="contact-card"><div class="contact-card-icon"><i class="fas fa-envelope"></i></div><h5>Email</h5><p style="color:var(--gray);font-size:.85rem;">hello@fuocopizza.com</p></div></div>
+            <div class="col-6 col-lg-3 reveal"><div class="contact-card"><div class="contact-card-icon"><i class="fas fa-wifi"></i></div><h5>Free WiFi</h5><p style="color:var(--gray);font-size:.85rem;">Fuoco_Guest</p></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section section-padding" id="faq">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">FAQ</div>
+            <h2 class="section-title">Frequently Asked <span class="highlight">Questions</span></h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion accordion-custom reveal" id="faqAccordion">
+                    <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#faq1">Do you offer gluten-free options?</button></h2><div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion"><div class="accordion-body">Yes! We offer gluten-free cauliflower crust and rice-flour crust, prepared in a dedicated area.</div></div></div>
+                    <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">Delivery radius and time?</button></h2><div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">We deliver within 5 miles. Standard delivery takes 30-45 minutes. Orders over $30 get free delivery!</div></div></div>
+                    <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">Can I customize toppings?</button></h2><div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Absolutely! Choose from over 30 premium toppings with our "Build Your Own" option.</div></div></div>
+                    <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">Do you cater events?</button></h2><div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Yes! Corporate events, birthdays, weddings — we create custom menus for any group size.</div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-content text-center reveal">
+            <h2 style="font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;margin-bottom:10px;">Get Fresh Pizza Updates</h2>
+            <p style="opacity:.9;margin-bottom:24px;font-size:.95rem;">Subscribe for exclusive deals and new menu items!</p>
+            <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+                <input type="email" class="newsletter-input" placeholder="Enter your email" required>
+                <button type="submit" class="btn-newsletter">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-brand"><i class="fas fa-fire"></i><span>Fuoco</span></div>
+                <p class="footer-desc">Authentic wood-fired pizza crafted with passion since 2009.</p>
+                <div class="footer-socials">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="footer-title">Quick Links</h5>
+                <ul class="footer-links">
+                    <li><a href="pizza.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="aboutus.html"><i class="fas fa-chevron-right"></i> About</a></li>
+                    <li><a href="menu.html"><i class="fas fa-chevron-right"></i> Menu</a></li>
+                    <li><a href="#gallery"><i class="fas fa-chevron-right"></i> Gallery</a></li>
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5 class="footer-title">Hours</h5>
+                <ul class="footer-hours">
+                    <li><span>Mon - Fri</span><span>11AM - 11PM</span></li>
+                    <li><span>Saturday</span><span>10AM - 12AM</span></li>
+                    <li><span>Sunday</span><span>10AM - 10PM</span></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5 class="footer-title">Contact</h5>
+                <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><p>123 Pizza Ave, NY 10001</p></div>
+                <div class="footer-contact-item"><i class="fas fa-phone-alt"></i><p>+1 (555) 123-4567</p></div>
+                <div class="footer-contact-item"><i class="fas fa-envelope"></i><p>hello@fuocopizza.com</p></div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p>&copy; 2024 Fuoco Pizza. All Rights Reserved. Made with <i class="fas fa-heart" style="color:var(--primary)"></i></p>
+        </div>
+    </div>
+</footer>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-chevron-up"></i></button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ===== PIZZA DATA =====
+const pizzas = [
+    { id:1, name:"Margherita Classic", category:"classic", ingredients:"San Marzano tomatoes, fresh mozzarella, basil, extra virgin olive oil", price:14.99, rating:4.9, reviews:328, badge:"Bestseller", img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80" },
+    { id:2, name:"Truffle Mushroom", category:"premium", ingredients:"Black truffle, wild mushrooms, fontina, thyme, truffle oil", price:22.99, rating:4.8, reviews:215, badge:"Chef's Pick", img:"https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?auto=format&fit=crop&w=500&q=80" },
+    { id:3, name:"Diavola Inferno", category:"spicy", ingredients:"Spicy salami, jalapeños, chili flakes, mozzarella, tomato sauce", price:18.99, rating:4.7, reviews:189, badge:"🌶️ Spicy", img:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=80" },
+    { id:4, name:"Garden Veggie", category:"veggie", ingredients:"Bell peppers, artichokes, olives, sun-dried tomatoes, pesto", price:16.99, rating:4.6, reviews:156, badge:"Veggie", img:"https://images.unsplash.com/photo-1511689660979-10d2b1aada49?auto=format&fit=crop&w=500&q=80" },
+    { id:5, name:"Quattro Formaggi", category:"premium", ingredients:"Mozzarella, gorgonzola, parmesan, ricotta, honey drizzle", price:20.99, rating:4.9, reviews:298, badge:"Popular", img:"https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=500&q=80" },
+    { id:6, name:"Pepperoni Supreme", category:"classic", ingredients:"Double pepperoni, mozzarella, oregano, tomato sauce", price:17.99, rating:4.8, reviews:412, badge:"#1 Seller", img:"https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=500&q=80" },
+    { id:7, name:"Mediterranean Sun", category:"veggie", ingredients:"Feta, olives, roasted peppers, spinach, balsamic glaze", price:19.99, rating:4.7, reviews:143, badge:"Veggie", img:"https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=500&q=80" },
+    { id:8, name:"Inferno BBQ", category:"spicy", ingredients:"BBQ chicken, ghost pepper sauce, red onion, cilantro", price:19.99, rating:4.5, reviews:97, badge:"🌶️ Extreme", img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80" }
+];
+
+let cart = [];
+
+// ===== RENDER MENU =====
+function renderMenu(filter='all') {
+    const grid = document.getElementById('menuGrid');
+    const filtered = filter==='all' ? pizzas : pizzas.filter(p=>p.category===filter);
+    grid.innerHTML = filtered.map(p=>`
+        <div class="col-6 col-md-4 col-lg-3" data-category="${p.category}">
+            <div class="pizza-card">
+                <div class="pizza-card-img">
+                    <img src="${p.img}" alt="${p.name}" loading="lazy">
+                    <span class="pizza-card-badge">${p.badge}</span>
+                    <button class="pizza-card-wishlist" onclick="showToast('Added to wishlist!')"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pizza-card-body">
+                    <div class="pizza-card-rating">${'<i class="fas fa-star"></i>'.repeat(Math.floor(p.rating))}<span>${p.rating} (${p.reviews})</span></div>
+                    <h4 class="pizza-card-name">${p.name}</h4>
+                    <p class="pizza-card-ingredients">${p.ingredients}</p>
+                    <div class="pizza-card-footer">
+                        <span class="pizza-card-price">$${p.price.toFixed(2)}</span>
+                        <button class="btn-add-cart" onclick="addToCart(${p.id})"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===== CART =====
+function addToCart(id) {
+    const pizza = pizzas.find(p=>p.id===id);
+    const existing = cart.find(i=>i.id===id);
+    if(existing) existing.qty+=1; else cart.push({...pizza,qty:1});
+    updateCart();
+    showToast(`${pizza.name} added to cart!`);
+}
+function removeFromCart(id) { cart=cart.filter(i=>i.id!==id); updateCart(); }
+function updateCart() {
+    const body=document.getElementById('cartBody'), badge=document.getElementById('cartBadge'), totalEl=document.getElementById('cartTotal');
+    const totalQty=cart.reduce((s,i)=>s+i.qty,0), totalPrice=cart.reduce((s,i)=>s+i.price*i.qty,0);
+    badge.textContent=totalQty; badge.style.display=totalQty>0?'flex':'none'; totalEl.textContent=`$${totalPrice.toFixed(2)}`;
+    if(!cart.length) body.innerHTML='<div class="cart-empty"><i class="fas fa-pizza-slice"></i><p>Your cart is empty</p></div>';
+    else body.innerHTML=cart.map(i=>`<div class="cart-item"><img src="${i.img}" class="cart-item-img" alt="${i.name}"><div class="cart-item-info"><h6>${i.name}</h6><span>$${(i.price*i.qty).toFixed(2)} (x${i.qty})</span></div><button class="cart-item-remove" onclick="removeFromCart(${i.id})"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+}
+function toggleCart() { document.getElementById('cartSidebar').classList.toggle('active'); document.getElementById('cartOverlay').classList.toggle('active'); }
+
+// ===== MOBILE MENU =====
+function openMobileMenu() { document.getElementById('mobileMenu').classList.add('active'); document.getElementById('mobileOverlay').classList.add('active'); document.getElementById('burgerBtn').classList.add('active'); document.body.style.overflow='hidden'; }
+function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('active'); document.getElementById('mobileOverlay').classList.remove('active'); document.getElementById('burgerBtn').classList.remove('active'); document.body.style.overflow=''; }
+document.getElementById('burgerBtn').addEventListener('click', openMobileMenu);
+document.getElementById('mobileMenuClose').addEventListener('click', closeMobileMenu);
+document.getElementById('mobileOverlay').addEventListener('click', closeMobileMenu);
+
+// ===== TOAST =====
+function showToast(msg) { const t=document.getElementById('toast'); document.getElementById('toast-message').textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+
+// ===== FORMS =====
+function handleReservation(e) { e.preventDefault(); showToast('Reservation confirmed!'); e.target.reset(); }
+function handleNewsletter(e) { e.preventDefault(); showToast('Subscribed! Check your inbox.'); e.target.reset(); }
+
+// ===== FILTER =====
+document.querySelectorAll('.menu-filter-btn').forEach(btn=>{ btn.addEventListener('click',function(){ document.querySelectorAll('.menu-filter-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); renderMenu(this.dataset.filter); }); });
+
+// ===== NAVBAR SCROLL — Only add shadow, no background change =====
+window.addEventListener('scroll',()=>{
+    document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>80);
+    document.getElementById('backToTop').classList.toggle('visible',window.scrollY>400);
+});
+
+// ===== REVEAL =====
+function observeReveal() {
+    const obs=new IntersectionObserver(entries=>{ entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('active'),i*80); obs.unobserve(e.target); } }); },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>{ if(!el.classList.contains('active')) obs.observe(el); });
+}
+
+// ===== COUNTER =====
+function animateCounters() {
+    const obs=new IntersectionObserver(entries=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ const target=+entry.target.dataset.target; const start=performance.now(); function update(now){ const elapsed=now-start; const progress=Math.min(elapsed/2000,1); const eased=1-Math.pow(1-progress,3); let val=Math.floor(eased*target); entry.target.textContent=target>=1000?(val>=49000?'50K+':(val/1000)+'K+'):val+'+'; if(progress<1) requestAnimationFrame(update); } requestAnimationFrame(update); obs.unobserve(entry.target); } }); },{threshold:.5});
+    document.querySelectorAll('.counter-number').forEach(c=>obs.observe(c));
+}
+
+// ===== PARTICLES =====
+function createParticles() { const c=document.getElementById('particles'); for(let i=0;i<15;i++){ const p=document.createElement('div'); p.classList.add('particle'); p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*6+'s'; p.style.animationDuration=(4+Math.random()*4)+'s'; const s=2+Math.random()*3; p.style.width=s+'px'; p.style.height=s+'px'; c.appendChild(p); } }
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click',function(e){ e.preventDefault(); const t=document.querySelector(this.getAttribute('href')); if(t){ window.scrollTo({top:t.offsetTop-80,behavior:'smooth'}); closeMobileMenu(); } }); });
+
+// ===== CART CLOSE =====
+document.getElementById('cartClose').addEventListener('click',toggleCart);
+document.getElementById('cartOverlay').addEventListener('click',toggleCart);
+
+// ===== PRELOADER =====
+window.addEventListener('load',()=>{ setTimeout(()=>document.getElementById('preloader').classList.add('hidden'),600); });
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',()=>{ renderMenu(); createParticles(); observeReveal(); animateCounters(); });
+</script>
+</body>
+</html>
